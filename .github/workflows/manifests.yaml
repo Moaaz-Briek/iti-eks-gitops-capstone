@@ -1,0 +1,18 @@
+name: Deploy Manifests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/manifests/**'
+
+jobs:
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Process manifests
+      run: echo "Process manifests!"
