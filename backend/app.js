@@ -6,6 +6,7 @@ const cors = require('cors');
 
 var postsRouter = require('./routes/posts');
 var indexRouter = require('./routes/index');
+var metricsRouter = require('./routes/metrics');
 
 var app = express();
 
@@ -29,5 +30,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
+app.use('/metrics', metricsRouter);
 
 module.exports = app;
