@@ -40,7 +40,6 @@ resource "aws_subnet" "private" {
   }
 }
 
-# Single NAT for all private subnets
 resource "aws_eip" "nat" {
   tags = { Name = "eks-nat-eip" }
 }
@@ -52,7 +51,6 @@ resource "aws_nat_gateway" "this" {
   depends_on    = [aws_internet_gateway.this]
 }
 
-# Route Tables
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
   tags   = { Name = "eks-public-rt" }
