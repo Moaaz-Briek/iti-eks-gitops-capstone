@@ -4,21 +4,43 @@ variable "aws_region" {
 }
 
 
+variable "cluster_name" {
+  type    = string
+  default = "gitops-eks-cluster"
+}
+
 variable "vpc_cidr" {
-  description = "CIDR block for the VPC."
-  type        = string
-  default     = "10.0.0.0/16"
+  type    = string
+  default = "10.0.0.0/16"
 }
 
 variable "public_subnet_cidrs" {
-  description = "List of public subnet CIDRs (3 AZs)."
-  type        = list(string)
-  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  type    = list(string)
+  default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
 variable "private_subnet_cidrs" {
-  description = "List of private subnet CIDRs (3 AZs)."
-  type        = list(string)
-  default     = ["10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
+  type    = list(string)
+  default = ["10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
 }
 
+variable "node_instance_types" {
+  description = "EKS node group instance types."
+  type        = list(string)
+  default     = ["t3.micro"]
+}
+
+variable "node_desired_capacity" {
+  type    = number
+  default = 2
+}
+
+variable "node_min_capacity" {
+  type    = number
+  default = 1
+}
+
+variable "node_max_capacity" {
+  type    = number
+  default = 3
+}
