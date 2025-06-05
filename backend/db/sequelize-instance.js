@@ -1,9 +1,9 @@
 const { Sequelize } = require('sequelize');
 const config = require('./config');
 
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: config.host,
-  dialect: config.dialect,
+const sequelize = new Sequelize(config.database.name, config.database.username, config.database.password, {
+  host: config.database.host,
+  dialect: config.database.dialect,
 });
 
 module.exports = sequelize;
