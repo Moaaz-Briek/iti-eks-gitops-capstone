@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.AUTH_TOKEN }}
 
       - name: Build Pipeline Docker image
-        run: docker build -t ghcr.io/danielfarag/tf-pipeline:latest .
+        run: docker build -t ghcr.io/danielfarag/tf-pipeline:latest ./utils/terraform-as-pod
         
       - name: Push Pipeline Docker image to GitHub Container Registry
         run: docker push ghcr.io/danielfarag/tf-pipeline:latest
