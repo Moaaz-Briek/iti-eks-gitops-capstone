@@ -7,3 +7,5 @@ data:
   TF_PATH: "terraform/platform"
   BUCKET_NAME: "iti-graduation-730335506473"
   BUCKET_STATE: "terraform/state/infra-platform"
+  VAR_bucket: "iti-graduation-730335506473"
+  VAR_repo: "https://github.com/danielfarag/iti-eks-gitops-capstone"

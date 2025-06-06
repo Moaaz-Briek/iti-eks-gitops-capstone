@@ -7,3 +7,4 @@ data:
   TF_PATH: "terraform/manifests"
   BUCKET_NAME: "iti-graduation-730335506473"
   BUCKET_STATE: "terraform/state/infra-manifests"
+  VAR_bucket: "iti-graduation-730335506473"
