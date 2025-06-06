@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tf-sa
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::730335506473:role/gitops-eks-cluster-terraform-pod-role   ## Fork & Edit Acc. N
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: tf-deploy-role
+  namespace: default
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "create", "update", "delete", "watch","patch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "create", "update", "delete", "watch","patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tf-deploy-rolebinding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: tf-sa
+  namespace: default
+roleRef:
+  kind: Role
+  name: tf-deploy-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tf-deploy
+  labels:
+    name: tf-deploy
+spec:
+  serviceAccountName: tf-sa
+  restartPolicy: Never
+  containers:
+  - name: tf-deploy
+    image: ghcr.io/danielfarag/tf-pipeline:latest
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+    envFrom:
+    - configMapRef:
+        name: deploy
