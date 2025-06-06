@@ -1,8 +1,12 @@
-name: Deploy Terraform Image
+name: Deploy terraform_image
+
 on:
   push:
     branches:
       - main
+    paths:
+      - 'utils/terraform-as-pod/**'
+
 
 jobs:
   terraform_image:
