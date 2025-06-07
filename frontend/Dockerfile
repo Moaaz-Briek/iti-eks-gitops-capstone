@@ -12,8 +12,8 @@ RUN npm run build
 
 
 
-FROM alpine
+FROM nginx:1.27.5-alpine-slim
 
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
 
-COPY --from=base /base/dist/frontend/browser /app
+COPY --from=base /base/dist/frontend/browser .
