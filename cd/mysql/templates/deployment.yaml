@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  serviceName: {{ .Values.service.name }}-headless
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        image: {{ .Values.image.host }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: 3306  
+          name: {{ .Values.name }}-port
+        envFrom:
+        - secretRef:
+            name: {{ .Values.secret.name }}
+            
+        volumeMounts:
+        - name: {{ .Values.name }}-pvc
+          mountPath: /var/lib/mysql
+
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.name }}-pvc
+    spec:
+      {{- if .Values.storageClassName }}
+      storageClassName: {{ .Values.storageClassName }}
+      {{- end }}
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
