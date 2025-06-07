@@ -32,5 +32,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           FRONTEND_REPO: frontend
         run: |
-          docker build -t $ECR_REGISTRY/$FRONTEND_REPO:${{ github.sha }} ./frontend
+          docker build -t $ECR_REGISTRY/$FRONTEND_REPO:${{ github.sha }} -t $ECR_REGISTRY/$FRONTEND_REPO:latest ./frontend
+          docker push $ECR_REGISTRY/$FRONTEND_REPO:latest
           docker push $ECR_REGISTRY/$FRONTEND_REPO:${{ github.sha }}
