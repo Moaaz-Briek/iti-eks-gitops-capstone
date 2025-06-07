@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      annotations:
+        secret.reloader.stakater.com/reload: "{{ .Values.secret.mysql }},{{ .Values.secret.redis }}"
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        image: {{ .Values.image.host }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        ports:
+        - containerPort: 80
+        envFrom:
+        - secretRef:
+            name: {{ .Values.secret.mysql }} 
+        - secretRef:
+            name: {{ .Values.secret.redis }} 

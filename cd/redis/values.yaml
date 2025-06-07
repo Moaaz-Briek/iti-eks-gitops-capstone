@@ -1,0 +1,23 @@
+replicaCount: 1
+name: redis
+
+image:
+  host: "docker.io"
+  repository: redis
+  tag: latest
+
+
+service: 
+  name: redis
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 32Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+
+secret:
+  name: redis-k8s-secret
+

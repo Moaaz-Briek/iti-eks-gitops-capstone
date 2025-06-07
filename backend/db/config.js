@@ -1,11 +1,12 @@
 module.exports = {
     database: {
-        name: process.env.DB_NAME || 'myDB',
-        username: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || 'ROOT_PASSWORD',
-        host: process.env.DB_HOST || 'mysql',
+        host: process.env.MYSQL_HOST || 'mysql',
+        username: process.env.MYSQL_USER || 'root',
+        password: process.env.MYSQL_PASSWORD || 'ROOT_PASSWORD',
+        name: process.env.MYSQL_DATABASE || 'myDB',
         dialect: 'mysql',
     },
+    
     redis: {
         host: process.env.REDIS_HOST || 'redis',
         password: process.env.REDIS_PASSWORD || 'PASSWORD',

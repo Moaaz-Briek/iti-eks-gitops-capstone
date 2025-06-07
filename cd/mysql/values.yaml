@@ -1,0 +1,24 @@
+replicaCount: 1
+
+name: mysql
+
+image:
+  host: "docker.io"
+  repository: mysql
+  tag: latest
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 32Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+
+service: 
+  name: mysql
+
+secret:
+  name: mysql-k8s-secret
+
+

@@ -1,0 +1,32 @@
+replicaCount: 1
+name: frontend
+
+
+image:
+  host: ""
+  repository: frontend
+  tag: latest
+
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 32Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+
+    
+service:
+  backend:
+    name: backend-service
+    port: 3000
+  frontend:
+    name: frontend-service
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+
+config:
+  name: nginx-config
+
