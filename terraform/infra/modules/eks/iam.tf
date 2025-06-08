@@ -1,18 +1,11 @@
-data "aws_iam_policy_document" "eks_assume_role" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["eks.amazonaws.com"]
-    }
-  }
-}
-
+################################################################
+####################### Cluster Role ###########################
+################################################################
 resource "aws_iam_role" "eks_cluster_role" {
   name               = "${var.cluster_name}-cluster-role"
   assume_role_policy = data.aws_iam_policy_document.eks_assume_role.json
 }
+
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_AmazonEKSClusterPolicy" {
   role       = aws_iam_role.eks_cluster_role.name
@@ -24,20 +17,96 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
 }
 
-data "aws_iam_policy_document" "ebs_csi_assume_role" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
+
+################################################################
+#################### Cluster Group Role ########################
+################################################################
+
+resource "aws_iam_role" "node_group" {
+  name               = "${var.cluster_name}-eks-node-group-role"
+  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
+}
+
+
+resource "aws_iam_role_policy_attachment" "node_policies" {
+  for_each = toset([
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser",
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  ])
+
+  role       = aws_iam_role.node_group.name
+  policy_arn = each.key
+}
+
+######################################################################
+######################### EKS ASSUME ROLE [SSM] ######################
+######################################################################
+resource "aws_iam_role" "admin_assumable_role" {
+  name = "${var.cluster_name}-admin"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        AWS = aws_iam_role.node_group.arn
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "admin_access_attach" {
+  role       = aws_iam_role.admin_assumable_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+resource "aws_eks_access_entry" "access_entry" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = aws_iam_role.admin_assumable_role.arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "adminstrator" {
+  count = 2
+  cluster_name  = aws_eks_cluster.this.name
+  policy_arn    = element([
+    "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy",
+    "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  ], count.index)
+  principal_arn = aws_iam_role.admin_assumable_role.arn
+
+  access_scope {
+    type = "cluster"
   }
 }
 
+################################################################
+######################## ECI SA ROLE ###########################
+################################################################
+
 resource "aws_iam_role" "ebs_csi_driver_role" {
-  name               = "${var.cluster_name}-ebs-csi-driver-role"
-  assume_role_policy = data.aws_iam_policy_document.ebs_csi_assume_role.json
+  name = "${var.cluster_name}-ebs-csi-driver-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.eks_oidc.arn
+        },
+        Action = "sts:AssumeRoleWithWebIdentity",
+        Condition = {
+          StringEquals = {
+            "${replace(data.aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+          }
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_iam_policy" "ebs_csi_driver" {
@@ -68,47 +137,67 @@ resource "aws_iam_policy" "ebs_csi_driver" {
   })
 }
 
+
 resource "aws_iam_role_policy_attachment" "ebs_csi_driver_role_attachment" {
   role       = aws_iam_role.ebs_csi_driver_role.name
   policy_arn = aws_iam_policy.ebs_csi_driver.arn
 }
 
-resource "aws_iam_role_policy_attachment" "eks_cluster" {
-  role       = aws_iam_role.eks_cluster_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-}
+##########################################################################
+######################### Terraform Deployment ###########################
+##########################################################################
+resource "aws_iam_role" "terraform_pod_role" {
+  name = "${var.cluster_name}-terraform-pod-role" 
 
-resource "aws_iam_role_policy_attachment" "eks_service" {
-  role       = aws_iam_role.eks_cluster_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-}
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}"
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "${replace(aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}:sub": "system:serviceaccount:default:tf-sa",
+          "${replace(aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}:aud": "sts.amazonaws.com"
+        }
+      }
+    }]
+  })
 
-
-resource "aws_iam_role" "node_group" {
-  name               = "${var.cluster_name}-eks-node-group-role"
-  assume_role_policy = data.aws_iam_policy_document.node_assume_role.json
-}
-
-data "aws_iam_policy_document" "node_assume_role" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
+  inline_policy {
+    name = "terraform-s3-backend-access"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Effect = "Allow"
+          Action = ["s3:*"]
+          Resource = ["*"]
+        },
+      ]
+    })
   }
 }
 
-resource "aws_iam_role_policy_attachment" "node_worker" {
-  role       = aws_iam_role.node_group.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-}
-resource "aws_iam_role_policy_attachment" "node_cni" {
-  role       = aws_iam_role.node_group.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-}
-resource "aws_iam_role_policy_attachment" "node_ecr" {
-  role       = aws_iam_role.node_group.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+
+
+######################################################################################
+######################### Admin Permission TO CURRENT USER ###########################
+######################################################################################
+resource "aws_eks_access_entry" "current_user_access" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = data.aws_caller_identity.current.arn
+  type = "STANDARD"
 }
 
+resource "aws_eks_access_policy_association" "current_user_admin_policy" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = aws_eks_access_entry.current_user_access.principal_arn
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy" 
+
+  access_scope {
+    type = "cluster"
+  }
+}
