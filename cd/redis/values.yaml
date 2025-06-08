@@ -2,8 +2,7 @@ replicaCount: 1
 name: redis
 
 image:
-  host: "docker.io"
-  repository: redis
+  repository: docker.io/redis
   tag: latest
 
 
@@ -21,3 +20,4 @@ resources:
 secret:
   name: redis-k8s-secret
 
+storageClassName: "ebs-csi"
