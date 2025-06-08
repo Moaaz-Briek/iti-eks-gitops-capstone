@@ -6,3 +6,15 @@ variable "region" {
 variable "bucket" {
   type = string
 }
+
+
+variable "repo" {
+  type = string
+}
+
+variable "github_name" {
+  type = string
+}
+variable "github_privatekey" {
+  type = string
+}
