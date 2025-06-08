@@ -12,10 +12,10 @@ service:
 resources:
   limits:
     cpu: 50m
-    memory: 32Mi
+    memory: 128Mi
   requests:
     cpu: 50m
-    memory: 32Mi
+    memory: 128Mi
 
 secret:
   name: redis-k8s-secret

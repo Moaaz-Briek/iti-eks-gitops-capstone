@@ -1,24 +1,13 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ .Values.name }}-pvc
-spec:
-  storageClassName: ebs-csi
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Values.name }}
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: {{ .Values.name }}
+  serviceName: {{ .Values.service.name }}-headless
+  replicas: 1
   template:
     metadata:
       labels:
@@ -31,13 +20,20 @@ spec:
         ports:
         - containerPort: 6379
           name: {{ .Values.name }}
-        volumeMounts:
-        - name: data-volume
-          mountPath: /data
         envFrom:
         - secretRef:
             name: {{ .Values.secret.name }}
-      volumes:
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: {{ .Values.name }}-pvc
+            
+        volumeMounts:
+        - name: {{ .Values.name }}-pvc
+          mountPath: /data
+
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.name }}-pvc
+    spec:
+      storageClassName: {{ .Values.storageClassName }}
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
