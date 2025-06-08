@@ -44,7 +44,10 @@ output "ecr_token" {
 }
 
 
-
+##################### EXTERNAL SECRET  ###################
+output "external_secrets_role_arn" {
+  value = module.secrets.external_secrets_role_arn
+}
 
 ########################################
 

@@ -7,6 +7,7 @@ locals {
 #   manifest = yamldecode(file("${path.module}/manifests/argocd_image_updater_secret.yaml"))
 # }
 resource "kubernetes_secret" "argocd_image_updater_secret" {
+  depends_on = [ helm_release.argocd]
   metadata {
     name      = "aws-token"
     namespace = "argocd"
@@ -42,7 +43,7 @@ resource "helm_release" "argocd-image-updater" {
   name       = "argocd-image-updater"
   namespace  = "argocd"
   create_namespace = true
-  depends_on = [ kubernetes_manifest.ebs_csi, kubernetes_secret.argocd_image_updater_secret ]
+  depends_on = [ helm_release.argocd, kubernetes_manifest.ebs_csi, kubernetes_secret.argocd_image_updater_secret ]
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argocd-image-updater"
