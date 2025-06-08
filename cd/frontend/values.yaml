@@ -1,13 +1,8 @@
 replicaCount: 1
 name: frontend
-
-
 image:
-  host: ""
-  repository: frontend
+  repository: 730335506473.dkr.ecr.us-east-1.amazonaws.com/frontend
   tag: latest
-
-
 resources:
   limits:
     cpu: 50m
@@ -15,18 +10,14 @@ resources:
   requests:
     cpu: 50m
     memory: 32Mi
-
-    
 service:
   backend:
     name: backend-service
     port: 3000
   frontend:
     name: frontend-service
-    type: ClusterIP
+    type: LoadBalancer
     port: 80
     targetPort: 80
-
 config:
   name: nginx-config
-

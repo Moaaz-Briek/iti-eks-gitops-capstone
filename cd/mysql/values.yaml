@@ -3,8 +3,7 @@ replicaCount: 1
 name: mysql
 
 image:
-  host: "docker.io"
-  repository: mysql
+  repository: docker.io/mysql
   tag: latest
 
 resources:
@@ -22,3 +21,4 @@ secret:
   name: mysql-k8s-secret
 
 
+storageClassName: "ebs-csi"
