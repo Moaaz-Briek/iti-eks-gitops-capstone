@@ -44,3 +44,11 @@ variable "node_max_capacity" {
   type    = number
   default = 3
 }
+
+variable "bucket" {
+  type    = string
+}
+variable "bucket_state" {
+  type    = string
+  default = "terraform/state/infra"
+}

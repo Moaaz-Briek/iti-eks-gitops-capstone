@@ -1,3 +1,6 @@
+variable "region" {
+  type = string
+}
 variable "cluster_name" {
   type = string
 }
@@ -8,6 +11,11 @@ variable "vpc_id" {
 
 variable "private_subnet_ids" {
   description = "Private subnet IDs for EKS control plane/nodes."
+  type        = list(string)
+}
+
+variable "private_subnet_cidrs" {
+  description = "Private subnet cidrs for EKS control plane/nodes."
   type        = list(string)
 }
 
@@ -29,4 +37,13 @@ variable "node_min_capacity" {
 variable "node_max_capacity" {
   type    = number
   default = 3
+}
+
+
+variable "s3_bucket" {
+  type    = string
+}
+
+variable "s3_bucket_state" {
+  type    = string
 }
