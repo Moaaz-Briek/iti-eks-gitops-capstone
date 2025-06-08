@@ -16,10 +16,3 @@ data "terraform_remote_state" "infra" {
   }
 }
 
-output "platform" {
-  value = data.terraform_remote_state.platform.outputs.message
-}
-
-output "infra" {
-  value = data.terraform_remote_state.infra.outputs.message
-}
