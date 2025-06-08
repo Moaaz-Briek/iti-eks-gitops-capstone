@@ -44,7 +44,7 @@ jobs:
           cat <<EOF > backend.tf
           terraform {
             backend "s3" {
-              bucket  = "${{ vars.TF_VAR_bucket }}"
+              bucket  = "${{ vars.BUCKET_NAME }}"
               key = "terraform/state/infra"
               region = "${{ vars.AWS_REGION }}"
             }
