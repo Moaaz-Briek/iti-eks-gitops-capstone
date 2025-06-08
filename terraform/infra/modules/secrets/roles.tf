@@ -1,5 +1,5 @@
 resource "aws_iam_role" "external_secret_role" {
-  name = "ebs-csi-driver-role"
+  name = "exteral-secrets-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
