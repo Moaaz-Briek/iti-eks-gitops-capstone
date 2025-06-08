@@ -1,18 +1,13 @@
 name: backend-node
-
 replicaCount: 1
-
 image:
-  host: ""
-  repository: backend
-  tag: latest
-
+  repository: 730335506473.dkr.ecr.us-east-1.amazonaws.com/backend
+  tag: adbffdf5857c299be1ab0ee9c8f7fe7dbf3a8c23
 service:
   name: backend-service
   type: ClusterIP
   port: 3000
   targetPort: 3000
-
 resources:
   limits:
     cpu: 100m
@@ -20,7 +15,6 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-
-secret: 
+secret:
   mysql: mysql-k8s-secret
   redis: redis-k8s-secret
