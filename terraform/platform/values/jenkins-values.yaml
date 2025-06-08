@@ -1,0 +1,13 @@
+controller:
+  serviceType: LoadBalancer
+  servicePort: 80
+  admin:
+    password: password
+  additionalPlugins: 
+  # - workflow-aggregator
+
+persistence:
+  enabled: true
+  storageClass: ebs-csi
+  size: 3Gi
+  accessMode: ReadWriteOnce
