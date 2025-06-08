@@ -63,6 +63,14 @@ router.post('/', async (req, res) => {
     const newPost = await Post.create({ title, description });
     successfulResponses.inc({ method: req.method, route: '/', status: 200 });
     console.log('Post created successfully:', newPost);
+    redis.del(`posts`, (delErr, response) => {
+      if (delErr) {
+        console.error('Error deleting cached posts:', delErr);
+      } else if (response === 1) {
+        console.log(`Cache for posts deleted successfully.`);
+      }
+    });
+
     res.status(201).json(newPost);
   } catch (error) {
     failedResponses.inc({ method: req.method, route: '/', status: 500 });
@@ -135,6 +143,15 @@ router.put('/:id', async (req, res) => {
       await post.save();
       successfulResponses.inc({ method: req.method, route: '/:id', status: 200 });
       console.log('Post updated successfully:', post);
+
+      redis.del(`posts`, (delErr, response) => {
+        if (delErr) {
+          console.error('Error deleting cached posts:', delErr);
+        } else if (response === 1) {
+          console.log(`Cache for posts deleted successfully.`);
+        }
+      });
+
       res.status(200).json(post);
     } else {
       failedResponses.inc({ method: req.method, route: '/:id', status: 404 });
@@ -172,6 +189,15 @@ router.delete('/:id', async (req, res) => {
       });
       successfulResponses.inc({ method: req.method, route: '/:id', status: 200 });
       console.log('Post deleted successfully:', post);
+
+      redis.del(`posts`, (delErr, response) => {
+        if (delErr) {
+          console.error('Error deleting cached posts:', delErr);
+        } else if (response === 1) {
+          console.log(`Cache for posts deleted successfully.`);
+        }
+      });
+
       res.status(200).json({ message: 'Post deleted successfully' });
     } else {
       failedResponses.inc({ method: req.method, route: '/:id', status: 404 });
