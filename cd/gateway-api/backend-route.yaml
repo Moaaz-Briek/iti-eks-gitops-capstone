@@ -22,10 +22,3 @@ spec:
       backendRefs:
         - name: backend-service
           port: 3000
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /metrics
-      backendRefs:
-        - name: prometheus-backend-service
-          port: 3000
