@@ -6,8 +6,18 @@ module "vpc" {
   az_count             = 3
 }
 
+module "bastion" {
+  source               = "./modules/bastion"
+  vpc_id               = module.vpc.vpc_id
+  private_subnet_ids   = module.vpc.private_subnet_ids
+  cluster_name         = var.cluster_name
+  private_subnet_cidrs = var.private_subnet_cidrs
+  region               = var.aws_region
+  bucket               = var.bucket
+}
+
 module "eks" {
-  depends_on            = [ module.vpc ]
+  depends_on            = [ module.vpc, module.bastion]
   source                = "./modules/eks"
   cluster_name          = var.cluster_name
   vpc_id                = module.vpc.vpc_id
@@ -20,6 +30,7 @@ module "eks" {
   region                = var.aws_region
   s3_bucket             = var.bucket
   s3_bucket_state       = var.bucket_state
+  bastion_role_arn      = module.bastion.bastion_role_arn
 }
 
 module "ecr" {
