@@ -5,6 +5,7 @@
 [ -z "$BUCKET_NAME" ] && echo "Error: BUCKET_NAME is not set." && exit 1
 [ -z "$BUCKET_STATE" ] && echo "Error: BUCKET_STATE is not set." && exit 1
 
+TF_ACTION="${TF_ACTION:-apply}"
 
 VAR_ARGS=()
 for env_var in $(env | grep '^VAR_' | cut -d= -f1); do
@@ -36,4 +37,4 @@ echo "Running terraform init..."
 terraform init -reconfigure
 
 echo "Running terraform apply with "${VAR_ARGS[@]}" ...."
-terraform apply "${VAR_ARGS[@]}" -auto-approve
+terraform $TF_ACTION "${VAR_ARGS[@]}" -auto-approve

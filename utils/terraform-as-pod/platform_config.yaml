@@ -2,9 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: deploy
+  namespace: default
 data:
-  REPO_URL: "https://github.com/danielfarag/iti-eks-gitops-capstone"  # fork and edit
+  REPO_URL: "https://github.com/danielfarag/iti-eks-gitops-capstone"
   TF_PATH: "terraform/platform"
+  TF_ACTION: apply
   BUCKET_NAME: "iti-graduation-730335506473"
   BUCKET_STATE: "terraform/state/infra-platform"
   VAR_bucket: "iti-graduation-730335506473"
