@@ -47,3 +47,7 @@ variable "s3_bucket" {
 variable "s3_bucket_state" {
   type    = string
 }
+
+variable "bastion_role_arn" {
+  type = string
+}
