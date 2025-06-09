@@ -1,18 +1,59 @@
-name: Deploy platform
-
+name: Terraform Apply/Destroy - Platform
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'terraform/platform/**'
-
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Choose Terraform action (apply or destroy)'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - destroy
 jobs:
-  platform:
+  terraform_apply:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Process Platform
-      run: echo "Process platform!"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Get Bastion Instance ID
+        id: get_bastion_id
+        run: |
+          INSTANCE_ID=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=bastion" "Name=instance-state-name,Values=running" \
+            --query "Reservations[0].Instances[0].InstanceId" \
+            --output text)
+          echo "::set-output name=instance_id::$INSTANCE_ID"
+        if: success() && steps.get_bastion_id.outputs.instance_id != 'None'
+
+      - name: Run command on Bastion instance via SSM
+        if: steps.get_bastion_id.outputs.instance_id != '' && steps.get_bastion_id.outputs.instance_id != 'None'
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --instance-ids "${{ steps.get_bastion_id.outputs.instance_id }}" \
+            --parameters 'commands=[
+              "cat <<EOF > /root/iti-eks/terraform/platform/backend2.tfvars
+          terraform {
+            backend \"s3\" {
+              bucket = \"${{ vars.BUCKET_NAME }}\"
+              key    = \"terraform/state/infra-platform\"
+              region = \"${{ vars.AWS_REGION }}\"
+            }
+          }
+          EOF",
+              "cat <<EOF > /root/iti-eks/terraform/platform/vars.tfvars
+          bucket = \"${{ vars.BUCKET_NAME }}\"
+          repo   = \"https://github.com/DanielFarag/iti-eks-gitops-capstone\"
+          EOF",
+              "terraform -chdir=/root/iti-eks/terraform/platform init > /root/platform-tf-init 2> /root/platform-tf-init-errors",
+              "terraform -chdir=/root/iti-eks/terraform/platform ${{ github.event.inputs.action }} -var-file=vars.tfvars -auto-approve > /root/platform-tf-${{ github.event.inputs.action }} 2> /root/platform-tf-${{ github.event.inputs.action }}-errors"
+            ]' \
+            --output text
