@@ -37,6 +37,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: tf-deploy
+  namespace: default
   labels:
     name: tf-deploy
 spec:
