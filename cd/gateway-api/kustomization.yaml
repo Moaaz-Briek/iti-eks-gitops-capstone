@@ -14,7 +14,7 @@ patches:
   - patch: |-
       - op: add
         path: /spec/kubernetes/service/loadBalancerIP
-        value: 13.48.232.108
+        value: 54.84.57.149
     target:
       kind: NginxProxy
       name: nginx-gateway-proxy-config
@@ -32,7 +32,7 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/hostnames/0
-        value: iti.noodleblitz.space
+        value: grad.noodleblitz.space
       - op: add
         path: /metadata/namespace
         value: default
@@ -41,12 +41,9 @@ patches:
   - patch: |-
       - op: add
         path: /spec/listeners/0/hostname
-        value: iti.noodleblitz.space
-      - op: add
-        path: /spec/listeners/1/hostname
-        value: iti.noodleblitz.space
+        value: grad.noodleblitz.space
       - op: add
         path: /spec/listeners/1/tls/certificateRefs/name
-        value: noodleblitz-iti-tls
+        value: noodleblitz-grad-tls
     target:
       kind: Gateway
