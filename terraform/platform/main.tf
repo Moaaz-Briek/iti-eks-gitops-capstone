@@ -31,7 +31,7 @@ resource "helm_release" "argocd" {
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
-  version    = "5.46.6" 
+  version    = "5.46.6"
 
   values = [
     file("values/argocd-values.yaml") 
@@ -82,4 +82,16 @@ resource "helm_release" "external_secrets" {
   }
 }
 
+resource "helm_release" "kube_prometheus_stack" {
+  name             = "kube-prometheus-stack"
+  namespace        = "monitoring"
+  chart            = "kube-prometheus-stack"
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  version          = "59.0.0"
 
+  create_namespace = true
+
+  values = [
+    file("${path.module}/values/monitoring-values.yaml")
+  ]
+}

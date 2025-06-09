@@ -1,0 +1,18 @@
+prometheus:
+  service:
+    type: LoadBalancer
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+
+grafana:
+  adminUser: admin
+  adminPassword: admin123
+  service:
+    type: LoadBalancer
+  defaultDashboardsEnabled: true
+
+alertmanager:
+  service:
+    type: LoadBalancer

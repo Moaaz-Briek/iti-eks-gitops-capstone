@@ -1,0 +1,46 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - prometheus-backend-service.yaml
+  - prometheus-backend-servicemonitor.yaml
+  - grafana-dashboard.yaml
+  # - prometheus-rule.yaml
+  # - alertmanager-config.yaml
+
+# namePrefix: random-choice- # Prefix added to resource names
+
+# labels:
+#   - pairs:
+#       app: random-choice # Application label
+#     includeSelectors: true
+
+patches:
+  # Service Patch
+  - patch: |-
+      - op: add
+        path: /metadata/namespace
+        value: default
+      - op: add
+        path: /spec/ports/0/targetPort
+        value: 3000                # Target port for Service
+    target:
+      kind: Service
+      name: prometheus-backend-service
+  # ServiceMonitor Patch
+  - patch: |-
+      - op: add
+        path: /metadata/namespace
+        value: monitoring        # Namespace for the ServiceMonitor
+      - op: add
+        path: /spec/selector/matchLabels/app
+        value: default        # Match label for the ServiceMonitor
+      - op: replace
+        path: /spec/namespaceSelector/matchNames/0
+        value: default        # Namespace for the ServiceMonitor
+      - op: add
+        path: /spec/endpoints/0/interval
+        value: 30s                 # Scrape interval for the ServiceMonitor
+    target:
+      kind: ServiceMonitor
+      name: prometheus-backend-service-monitor
