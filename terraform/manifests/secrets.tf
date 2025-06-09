@@ -31,7 +31,7 @@ resource "kubernetes_secret" "repo" {
     type          = "git"
     url           = "https://github.com/danielfarag/iti-eks-gitops-capstone"
     username      = var.github_name
-    password      = var.github_privatekey
+    password      = var.github_token
   }
 
   type = "Opaque"

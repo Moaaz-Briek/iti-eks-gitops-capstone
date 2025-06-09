@@ -22,8 +22,8 @@ output "eks_cluster_name" {
   description = "Name of the EKS cluster."
 }
 
-output "nodes_ids" {
-  value = data.aws_instances.eks_nodes.ids
+output "bastion_id" {
+  value = module.bastion.instance_id
 }
 
 ########################### ECR #####################################
@@ -48,16 +48,3 @@ output "ecr_token" {
 output "external_secrets_role_arn" {
   value = module.secrets.external_secrets_role_arn
 }
-
-########################################
-
-# output "cluster_endpoint" {
-#   value = module.eks.cluster_endpoint
-# }
-# output "cluster_certificate_authority_data" {
-#   value = module.eks.cluster_certificate_authority_data
-# }
-# output "cluster_token" {
-#   value = module.eks.cluster_token
-#   sensitive = true
-# }

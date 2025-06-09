@@ -33,55 +33,12 @@ resource "aws_iam_role_policy_attachment" "node_policies" {
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser",
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ])
 
   role       = aws_iam_role.node_group.name
   policy_arn = each.key
 }
 
-######################################################################
-######################### EKS ASSUME ROLE [SSM] ######################
-######################################################################
-resource "aws_iam_role" "admin_assumable_role" {
-  name = "${var.cluster_name}-admin"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        AWS = aws_iam_role.node_group.arn
-      }
-      Action = "sts:AssumeRole"
-    }]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "admin_access_attach" {
-  role       = aws_iam_role.admin_assumable_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-resource "aws_eks_access_entry" "access_entry" {
-  cluster_name  = aws_eks_cluster.this.name
-  principal_arn = aws_iam_role.admin_assumable_role.arn
-  type          = "STANDARD"
-}
-
-resource "aws_eks_access_policy_association" "adminstrator" {
-  count = 2
-  cluster_name  = aws_eks_cluster.this.name
-  policy_arn    = element([
-    "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy",
-    "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
-  ], count.index)
-  principal_arn = aws_iam_role.admin_assumable_role.arn
-
-  access_scope {
-    type = "cluster"
-  }
-}
 
 ################################################################
 ######################## ECI SA ROLE ###########################
@@ -195,6 +152,26 @@ resource "aws_eks_access_entry" "current_user_access" {
 resource "aws_eks_access_policy_association" "current_user_admin_policy" {
   cluster_name  = aws_eks_cluster.this.name
   principal_arn = aws_eks_access_entry.current_user_access.principal_arn
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy" 
+
+  access_scope {
+    type = "cluster"
+  }
+}
+
+
+######################################################################################
+######################### Admin Permission TO Bastion ################################
+######################################################################################
+resource "aws_eks_access_entry" "bastion_host" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = var.bastion_role_arn
+  type = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "bastion_server_association" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = aws_eks_access_entry.bastion_host.principal_arn
   policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy" 
 
   access_scope {
