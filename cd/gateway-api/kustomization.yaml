@@ -6,6 +6,7 @@ resources:
   # - https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v2.0.0/deploy/crds.yaml
   # - https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v2.0.0/deploy/default/deploy.yaml
   - noodleblitz-iti-secret.yaml
+  - noodleblitz-grad-secret.yaml
   - gateway.yaml
   # - backend-route.yaml
   - frontend-route.yaml
@@ -14,7 +15,8 @@ patches:
   - patch: |-
       - op: add
         path: /spec/kubernetes/service/loadBalancerIP
-        value: 54.84.57.149
+        # value: 54.84.57.149
+        value: 13.48.232.108
     target:
       kind: NginxProxy
       name: nginx-gateway-proxy-config
@@ -32,7 +34,8 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/hostnames/0
-        value: grad.noodleblitz.space
+        # value: grad.noodleblitz.space
+        value: iti.noodleblitz.space
       - op: add
         path: /metadata/namespace
         value: default
@@ -41,9 +44,11 @@ patches:
   - patch: |-
       - op: add
         path: /spec/listeners/0/hostname
-        value: grad.noodleblitz.space
+        # value: grad.noodleblitz.space
+        value: iti.noodleblitz.space
       - op: add
         path: /spec/listeners/1/tls/certificateRefs/name
-        value: noodleblitz-grad-tls
+        # value: noodleblitz-grad-tls
+        value: noodleblitz-iti-tls
     target:
       kind: Gateway
