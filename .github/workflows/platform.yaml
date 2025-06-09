@@ -40,7 +40,7 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --instance-ids "${{ steps.get_bastion_id.outputs.instance_id }}" \
             --parameters 'commands=[
-              "cat <<EOF > /root/iti-eks/terraform/platform/backend.tfvars
+              "cat <<EOF > /root/iti-eks/terraform/platform/backend.tf
           terraform {
             backend \"s3\" {
               bucket = \"${{ vars.BUCKET_NAME }}\"
