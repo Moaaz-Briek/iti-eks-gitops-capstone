@@ -15,6 +15,6 @@ variable "repo" {
 variable "github_name" {
   type = string
 }
-variable "github_privatekey" {
+variable "github_token" {
   type = string
 }
