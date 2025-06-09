@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  random-choice-dashboard.json: |
+    {
+      "id": null,
+      "uid": "random-choice",
+      "title": "Random Choice Stats",
+      "schemaVersion": 36,
+      "version": 1,
+      "refresh": "30s",
+      "panels": [
+        {
+          "type": "stat",
+          "title": "Randomize API Calls",
+          "targets": [
+            {
+              "expr": "sum(randomize_http_requests_total)",
+              "legendFormat": "Total",
+              "refId": "A"
+            }
+          ],
+          "gridPos": {
+            "h": 4,
+            "w": 8,
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    }

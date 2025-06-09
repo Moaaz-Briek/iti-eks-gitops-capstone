@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: alerts
+  namespace: monitoring # same namespace where your Prometheus is deployed
+  labels:
+    release: kube-prometheus-stack # must match the Helm release name!
+    role: alert-rules
+spec:
+  groups:
+    - name: randomize-alerts
+      rules:
+        - alert: HighRandomizeRequestRate
+          expr: sum(rate(randomize_http_requests_total[1m])) * 60 > 10
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High /randomize request rate"
+            description: |
+              The /randomize endpoint received more than 10 requests in the last 1 minute.
+        - alert: LowRandomizeRequestRate
+          expr: sum(rate(randomize_http_requests_total[1m])) * 60 < 5
+          for: 1m
+          labels:
+            severity: info
+          annotations:
+            summary: "Low /randomize request rate"
+            description: |
+              The /randomize endpoint received less than 5 requests in the last 1 minute.
+        - alert: NoRandomizeRequestRate
+          expr: sum(rate(randomize_http_requests_total[1m])) * 60 < 1
+          for: 1m
+          labels:
+            severity: info
+          annotations:
+            summary: "No /randomize requests"
+            description: |
+              The /randomize endpoint received no requests in the last 1 minute.

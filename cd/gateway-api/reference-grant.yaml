@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-httproute
+  namespace: bar # <-- Where the Service lives
+spec:
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: foo # <-- Where the HTTPRoute lives
+  to:
+    - group: "" # core Kubernetes group (for Service)
+      kind: Service
+      name: service-a # Optional, omit to allow all

@@ -17,7 +17,7 @@ resource "aws_iam_policy" "eks_describe_cluster_policy" {
         Resource = "arn:aws:eks:${var.region}:${data.aws_caller_identity.current.account_id}:cluster/*"
       },{
         Effect   = "Allow",
-        Action   = "s3:*",
+        Action   = "*",
         Resource = "*"
       },
     ]

@@ -7,7 +7,3 @@ variable "region" {
 variable "bucket" {
   type = string
 }
-
-variable "repo" {
-  type = string
-}

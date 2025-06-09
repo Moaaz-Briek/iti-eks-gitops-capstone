@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: alertmanager-main
+  namespace: monitoring
+  labels:
+    alertmanager: main
+    app.kubernetes.io/name: alertmanager
+type: Opaque
+stringData:
+  alertmanager.yaml: |
+    global:
+      smtp_smarthost: 'smtp.gmail.com:587'
+      smtp_from: 'manageralert8@gmail.com'
+      smtp_auth_username: 'manageralert8@gmail.com'
+      smtp_auth_password: 'alert_alert'
+      smtp_require_tls: true
+
+    route:
+      receiver: me
+      group_wait: 10s
+      group_interval: 30s
+      repeat_interval: 30m
+      routes:
+        - match:
+            alertname: HighRandomizeRequestRate
+          receiver: friends
+        - match:
+            alertname: LowRandomizeRequestRate
+          receiver: family
+    receivers:
+      - name: me
+        email_configs:
+          - to: 'adhambasheir000@gmail.com'
+      - name: friends
+        email_configs:
+          - to:
+            - 'danielfarag146@gmail.com'
+            - 'philopater.mansour.gerais@gmail.com'
+            - 'philopater.mansour@gmail.com'
+            - 'seifhendawy1@gmail.com'
+            - 'SivoM86@gmail.com'
+      - name: family
+        email_configs:
+          - to:
+            - 'amrbaghdad@gmail.com'
+            - 'zyad.ashraf1998@gmail.com'

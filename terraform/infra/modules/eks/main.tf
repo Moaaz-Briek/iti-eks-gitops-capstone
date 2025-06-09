@@ -5,7 +5,7 @@
 
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
-  version  = "1.32"
+  version  = "1.33"
   role_arn = aws_iam_role.eks_cluster_role.arn
   access_config {
     authentication_mode = "API"
