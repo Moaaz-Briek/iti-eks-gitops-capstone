@@ -153,7 +153,7 @@ resource "kubernetes_manifest" "gateway-api" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/AdhamBasheir/iti-test.git"
+        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
         targetRevision = "main"
         path           = "cd/gateway-api"
         kustomize      = {}
@@ -185,7 +185,7 @@ resource "kubernetes_manifest" "monitoring" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/AdhamBasheir/iti-test.git"
+        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
         targetRevision = "main"
         path           = "cd/monitoring"
         kustomize      = {}
