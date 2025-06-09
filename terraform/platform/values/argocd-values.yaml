@@ -4,6 +4,12 @@ configs:
   admin:
     passwordSecret:
       createSecret: false
+  cm:
+    resource.customizations: |
+      batch/Job:
+        ignoreDifferences: |
+          jsonPointers:
+            - /status
 server:
   service:
     type: LoadBalancer

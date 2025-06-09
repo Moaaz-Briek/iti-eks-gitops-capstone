@@ -20,6 +20,16 @@ patches:
       name: nginx-gateway-proxy-config
       namespace: nginx-gateway
   - patch: |-
+      - op: add
+        path: /metadata/annotations
+        value:
+          argocd.argoproj.io/hook: PostSync
+          argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    target:
+      kind: Job
+      name: nginx-gateway-cert-generator
+      namespace: nginx-gateway
+  - patch: |-
       - op: replace
         path: /spec/hostnames/0
         value: iti.noodleblitz.space
