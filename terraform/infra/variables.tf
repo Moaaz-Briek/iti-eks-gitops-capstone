@@ -27,7 +27,7 @@ variable "private_subnet_cidrs" {
 variable "node_instance_types" {
   description = "EKS node group instance types."
   type        = list(string)
-  default     = ["t3.micro"]
+  default     = ["t3.large"]
 }
 
 variable "node_desired_capacity" {
