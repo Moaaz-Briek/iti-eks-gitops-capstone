@@ -1,8 +1,8 @@
 replicaCount: 1
 name: frontend
 image:
-  repository: 730335506473.dkr.ecr.us-east-1.amazonaws.com/frontend
-  tag: latest
+  repository: 478614263566.dkr.ecr.us-east-1.amazonaws.com/frontend
+  tag: 30bfab706aac4ddd43082d3276416c7cfa532792
 resources:
   limits:
     cpu: 50m
