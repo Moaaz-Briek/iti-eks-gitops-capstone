@@ -24,10 +24,6 @@ rm kubectl
 
 
 
-## Configure EKS ##
-aws eks --region ${region} update-kubeconfig --name ${cluster_name}
-
-
 snap install amazon-ssm-agent --classic
 systemctl enable amazon-ssm-agent
 systemctl restart amazon-ssm-agent  

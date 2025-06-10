@@ -1,11 +1,6 @@
 name: Build Frontend Images [ Testing ]
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - 'frontend/**'
   workflow_dispatch:
 
 jobs:

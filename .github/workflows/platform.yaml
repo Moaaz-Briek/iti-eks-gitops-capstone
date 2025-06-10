@@ -51,8 +51,9 @@ jobs:
           EOF",
               "cat <<EOF > /root/iti-eks/terraform/platform/vars.tfvars
           bucket = \"${{ vars.BUCKET_NAME }}\"
-          repo   = \"https://github.com/DanielFarag/iti-eks-gitops-capstone\"
+          repo   = \"https://github.com/${{ github.actor }}/iti-eks-gitops-capstone\"
           EOF",
+              "aws eks --region ${{ vars.AWS_REGION }} update-kubeconfig --name ${{ vars.CLUSTER_NAME }}",
               "terraform -chdir=/root/iti-eks/terraform/platform init > /root/platform-tf-init 2> /root/platform-tf-init-errors",
               "terraform -chdir=/root/iti-eks/terraform/platform ${{ github.event.inputs.action }} -var-file=vars.tfvars -auto-approve > /root/platform-tf-${{ github.event.inputs.action }} 2> /root/platform-tf-${{ github.event.inputs.action }}-errors"
             ]' \
