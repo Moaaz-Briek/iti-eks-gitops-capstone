@@ -16,7 +16,7 @@ patches:
       - op: add
         path: /spec/kubernetes/service/loadBalancerIP
         # value: 54.84.57.149
-        value: 13.48.232.108
+        value: 54.197.245.58
     target:
       kind: NginxProxy
       name: nginx-gateway-proxy-config
