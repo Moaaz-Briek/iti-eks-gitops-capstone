@@ -1,7 +1,7 @@
 name: backend-node
 replicaCount: 1
 image:
-  repository: 730335506473.dkr.ecr.us-east-1.amazonaws.com/backend
+  repository: 478614263566.dkr.ecr.us-east-1.amazonaws.com/backend
   tag: latest
 service:
   name: backend-service

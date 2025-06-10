@@ -14,9 +14,12 @@ resources:
 patches:
   - patch: |-
       - op: add
-        path: /spec/kubernetes/service/loadBalancerIP
-        # value: 54.84.57.149
-        value: 13.48.232.108
+        path: /spec/kubernetes/service/annotations
+        value:
+          service.beta.kubernetes.io/aws-load-balancer-type: "external"
+          service.beta.kubernetes.io/aws-load-balancer-nlb-ip-address-type: "ipv4"
+          # service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-0724e82a82adeba77"
+          service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-0724e82a82adeba77"
     target:
       kind: NginxProxy
       name: nginx-gateway-proxy-config
@@ -47,7 +50,7 @@ patches:
         # value: grad.noodleblitz.space
         value: iti.noodleblitz.space
       - op: add
-        path: /spec/listeners/1/tls/certificateRefs/name
+        path: /spec/listeners/1/tls/certificateRefs/0/name
         # value: noodleblitz-grad-tls
         value: noodleblitz-iti-tls
     target:
