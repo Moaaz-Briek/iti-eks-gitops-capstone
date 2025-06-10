@@ -6,8 +6,8 @@ spec:
   parentRefs:
     - name: nginx-gateway
       namespace: nginx-gateway
-  hostnames:
-    - example.domain.com
+  # hostnames:
+  #   - example.domain.com
   rules:
     - matches:
         - path:

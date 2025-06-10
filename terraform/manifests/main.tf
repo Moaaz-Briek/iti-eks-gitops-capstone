@@ -141,36 +141,36 @@ resource "kubernetes_manifest" "frontend_app" {
 }
 
 
-# resource "kubernetes_manifest" "gateway-api" {
-#   depends_on = [kubernetes_secret.repo]
-#   manifest = {
-#     apiVersion = "argoproj.io/v1alpha1"
-#     kind       = "Application"
-#     metadata = {
-#       name      = "gateway-api"
-#       namespace = "argocd"
-#     }
-#     spec = {
-#       project = "default"
-#       source = {
-#         repoURL        = var.repo
-#         targetRevision = "main"
-#         path           = "cd/gateway-api"
-#         kustomize      = {}
-#       }
-#       destination = {
-#         server    = "https://kubernetes.default.svc"
-#         namespace = "default"
-#       }
-#       syncPolicy = {
-#         automated = {
-#           prune    = true
-#           selfHeal = true
-#         }
-#       }
-#     }
-#   }
-# }
+resource "kubernetes_manifest" "gateway-api" {
+  depends_on = [kubernetes_secret.repo]
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "gateway-api"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = var.repo
+        targetRevision = "main"
+        path           = "cd/gateway-api"
+        kustomize      = {}
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "default"
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
+}
 
 
 resource "kubernetes_manifest" "monitoring" {

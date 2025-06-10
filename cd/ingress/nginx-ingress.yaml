@@ -1,14 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress
+  name: nginx-ingress
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - grad.noodleblitz.space
+    secretName: noodleblitz-iti-tls
   rules:
-    - host: grad.noodleblitz.space
+    - host: iti.noodleblitz.space
       http:
         paths:
           - path: /api

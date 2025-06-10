@@ -3,7 +3,9 @@ kind: Kustomization
 
 resources:
   - https://raw.githubusercontent.com/kubernetes/ingress-nginx/refs/heads/main/deploy/static/provider/cloud/deploy.yaml
-  - ingress.yaml
+  - noodleblitz-iti-secret.yaml
+  - noodleblitz-grad-secret.yaml
+  - nginx-ingress.yaml
 
 patches:
   - patch: |-
