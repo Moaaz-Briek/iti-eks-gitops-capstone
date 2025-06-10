@@ -7,3 +7,7 @@ variable "region" {
 variable "bucket" {
   type = string
 }
+
+variable "domain_name" {
+  type = string
+}

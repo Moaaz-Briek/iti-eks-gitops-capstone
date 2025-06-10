@@ -59,6 +59,35 @@ resource "kubernetes_manifest" "redis_app" {
   }
 }
 
+resource "kubernetes_manifest" "ingress_app" {
+  depends_on = [ kubernetes_secret.repo ]
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "ingress-project"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = var.repo
+        targetRevision = "main"
+        path           = "cd/ingress"
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "default"
+      }
+      syncPolicy = {
+        automated = {
+          prune     = true
+          selfHeal  = true
+        }
+      }
+    }
+  }
+}
 
 
 resource "kubernetes_manifest" "backend_app" {
@@ -139,38 +168,6 @@ resource "kubernetes_manifest" "frontend_app" {
     }
   }
 }
-
-
-# resource "kubernetes_manifest" "gateway-api" {
-#   depends_on = [kubernetes_secret.repo]
-#   manifest = {
-#     apiVersion = "argoproj.io/v1alpha1"
-#     kind       = "Application"
-#     metadata = {
-#       name      = "gateway-api"
-#       namespace = "argocd"
-#     }
-#     spec = {
-#       project = "default"
-#       source = {
-#         repoURL        = var.repo
-#         targetRevision = "main"
-#         path           = "cd/gateway-api"
-#         kustomize      = {}
-#       }
-#       destination = {
-#         server    = "https://kubernetes.default.svc"
-#         namespace = "default"
-#       }
-#       syncPolicy = {
-#         automated = {
-#           prune    = true
-#           selfHeal = true
-#         }
-#       }
-#     }
-#   }
-# }
 
 
 resource "kubernetes_manifest" "monitoring" {
