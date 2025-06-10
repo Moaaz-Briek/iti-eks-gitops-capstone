@@ -8,8 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      # app: random-choice
-      tier: backend
+      app: backend-node
   namespaceSelector:
     matchNames:
       - {}

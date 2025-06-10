@@ -4,12 +4,10 @@ metadata:
   name: prometheus-backend-service
   # namespace: random-choice
   labels:
-    # app: random-choice
-    tier: backend
+    app: backend-node
 spec:
   selector:
-    # app: random-choice
-    tier: backend
+    app: backend-node
   ports:
     - name: metrics
       port: 8080

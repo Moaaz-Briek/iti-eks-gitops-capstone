@@ -29,12 +29,6 @@ patches:
       name: prometheus-backend-service
   # ServiceMonitor Patch
   - patch: |-
-      - op: add
-        path: /metadata/namespace
-        value: monitoring        # Namespace for the ServiceMonitor
-      - op: add
-        path: /spec/selector/matchLabels/app
-        value: default        # Match label for the ServiceMonitor
       - op: replace
         path: /spec/namespaceSelector/matchNames/0
         value: default        # Namespace for the ServiceMonitor
