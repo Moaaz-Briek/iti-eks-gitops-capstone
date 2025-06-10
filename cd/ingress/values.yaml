@@ -1,5 +1,5 @@
 ingress:
-  name: iti-ingress
+  name: app-ingress
   namespace: default
   class: nginx
   # clusterIssuer: letsencrypt
