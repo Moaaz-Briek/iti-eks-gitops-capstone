@@ -110,12 +110,12 @@ resource "helm_release" "kube_prometheus_stack" {
 }
 
 module "nginx-ingress" {
-  source       = "./IngressController"
+  source       = "./ingress-controller"
   eks_core_dns = var.domain_name
 }
 
 module "route53" {
-  source            = "./Route53"
+  source            = "./route53"
   nginx_lb_dns      = module.nginx-ingress.nginx_lb_dns
   domain_name       = var.domain_name
   jenkins_host      = "jenkins.${var.domain_name}"
@@ -123,5 +123,5 @@ module "route53" {
   prometheus_host   = "prometheus.${var.domain_name}"
   grafana_host      = "grafana.${var.domain_name}"
   alertmanager_host = "alertmanager.${var.domain_name}"
-  AppHost           = "AppHost.${var.domain_name}"
+  app_host          = "app.${var.domain_name}"
 }

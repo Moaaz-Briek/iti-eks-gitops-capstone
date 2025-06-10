@@ -26,6 +26,6 @@ variable "alertmanager_host" {
   description = "Alert Manager host URL"
 }
 
-variable "AppHost" {
-  description = "App host URL"
+variable "app_host" {
+  description = "Application host URL"
 }
