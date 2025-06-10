@@ -1,27 +1,27 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: grafana-dashboard
+  name: posts-api-dashboard
   namespace: monitoring
   labels:
     grafana_dashboard: "1"
 data:
-  random-choice-dashboard.json: |
+  posts-api-dashboard.json: |
     {
       "id": null,
-      "uid": "random-choice",
-      "title": "Random Choice Stats",
+      "uid": "posts-api-dashboard",
+      "title": "Posts API Metrics",
       "schemaVersion": 36,
       "version": 1,
       "refresh": "30s",
       "panels": [
         {
           "type": "stat",
-          "title": "Randomize API Calls",
+          "title": "Total Posts API Requests",
           "targets": [
             {
-              "expr": "sum(randomize_http_requests_total)",
-              "legendFormat": "Total",
+              "expr": "sum(posts_api_requests_total)",
+              "legendFormat": "Total Requests",
               "refId": "A"
             }
           ],
@@ -30,6 +30,64 @@ data:
             "w": 8,
             "x": 0,
             "y": 0
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Successful Posts API Responses",
+          "targets": [
+            {
+              "expr": "sum(posts_api_success_total)",
+              "legendFormat": "Total Successful",
+              "refId": "B"
+            }
+          ],
+          "gridPos": {
+            "h": 4,
+            "w": 8,
+            "x": 8,
+            "y": 0
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Failed Posts API Responses",
+          "targets": [
+            {
+              "expr": "sum(posts_api_failures_total)",
+              "legendFormat": "Total Failed",
+              "refId": "C"
+            }
+          ],
+          "gridPos": {
+            "h": 4,
+            "w": 8,
+            "x": 0,
+            "y": 4
+          }
+        },
+        {
+          "type": "graph",
+          "title": "Posts API Request Trends",
+          "targets": [
+            {
+              "expr": "rate(posts_api_requests_total[1m])",
+              "legendFormat": "{{method}} - {{route}}",
+              "refId": "D"
+            }
+          ],
+          "gridPos": {
+            "h": 8,
+            "w": 16,
+            "x": 0,
+            "y": 8
+          },
+          "legend": {
+            "show": true,
+            "values": true
+          },
+          "xaxis": {
+            "mode": "time"
           }
         }
       ]
