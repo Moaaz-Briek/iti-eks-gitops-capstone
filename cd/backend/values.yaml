@@ -2,7 +2,7 @@ name: backend-node
 replicaCount: 1
 image:
   repository: 730335506473.dkr.ecr.us-east-1.amazonaws.com/backend
-  tag: "latest"
+  tag: "d3f0f41"
 service:
   name: backend-service
   type: ClusterIP
