@@ -47,7 +47,7 @@ patches:
         # value: grad.noodleblitz.space
         value: iti.noodleblitz.space
       - op: add
-        path: /spec/listeners/1/tls/certificateRefs/name
+        path: /spec/listeners/1/tls/certificateRefs/0/name
         # value: noodleblitz-grad-tls
         value: noodleblitz-iti-tls
     target:
