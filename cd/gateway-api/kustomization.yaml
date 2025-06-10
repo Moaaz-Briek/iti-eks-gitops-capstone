@@ -14,12 +14,13 @@ resources:
 patches:
   - patch: |-
       - op: add
-        path: /spec/kubernetes/service/annotations
+        path: /spec/kubernetes/service
         value:
-          service.beta.kubernetes.io/aws-load-balancer-type: external
-          service.beta.kubernetes.io/aws-load-balancer-nlb-ip-address-type: ipv4
-          # service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-0724e82a82adeba77
-          service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-0724e82a82adeba77
+          annotations:
+            service.beta.kubernetes.io/aws-load-balancer-type: external
+            service.beta.kubernetes.io/aws-load-balancer-nlb-ip-address-type: ipv4
+            # service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-0724e82a82adeba77
+            service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-0724e82a82adeba77
     target:
       kind: NginxProxy
       name: nginx-gateway-proxy-config
