@@ -1,0 +1,62 @@
+pipeline {
+  agent {
+    kubernetes {
+      serviceAccount 'jenkins-kaniko-sa'
+      yaml """
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: git
+            image: alpine/git:latest
+            command:
+            - sleep
+            args:
+            - "9999999"
+          - name: kaniko
+            image: gcr.io/kaniko-project/executor:debug
+            command:
+            - sleep
+            args:
+            - "9999999"
+      """
+    }
+  }
+
+  environment {
+    ECR_REPO = "816069170265.dkr.ecr.us-east-1.amazonaws.com"
+    IMAGE_NAME = "backend"
+    GITHUB_URL = "https://github.com/danielfarag/iti-eks-gitops-capstone"
+  }
+
+  stages {
+    stage('Clone Repository') {
+      steps {
+        container('git') {
+          script {
+            git branch: 'main', url: env.GITHUB_URL
+            sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/k8s'
+
+            def gitShortCommit = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+
+            env.FULL_IMAGE_DESTINATION = "${env.ECR_REPO}/${env.IMAGE_NAME}:${gitShortCommit}"
+
+          }
+        }
+      }
+    }
+
+    stage('Build and Push') {
+      steps {
+        container('kaniko') {
+            sh '''
+              /kaniko/executor \\
+                --context ${IMAGE_NAME} \\
+                --dockerfile ${IMAGE_NAME}/Dockerfile \\
+                --destination=${FULL_IMAGE_DESTINATION} \\
+            '''
+        }
+      }
+    }
+  }
+}
