@@ -5,8 +5,8 @@ resources:
   - prometheus-backend-service.yaml
   - prometheus-backend-servicemonitor.yaml
   - grafana-dashboard.yaml
-  # - prometheus-rule.yaml
-  # - alertmanager-config.yaml
+  - prometheus-rule.yaml
+  - alertmanager-config.yaml
 
 # namePrefix: random-choice- # Prefix added to resource names
 

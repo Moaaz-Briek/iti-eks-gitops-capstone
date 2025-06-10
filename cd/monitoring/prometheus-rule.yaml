@@ -2,9 +2,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: posts-api-alerts
-  namespace: monitoring # same namespace as Prometheus
+  namespace: monitoring
   labels:
-    release: kube-prometheus-stack # Ensure this matches the Helm release
+    release: kube-prometheus-stack
     role: alert-rules
 spec:
   groups:

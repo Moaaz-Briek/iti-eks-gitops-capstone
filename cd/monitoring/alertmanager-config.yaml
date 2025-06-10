@@ -22,17 +22,27 @@ stringData:
       group_interval: 30s
       repeat_interval: 30m
       routes:
+        # Route for critical alerts
         - match:
-            alertname: HighRandomizeRequestRate
-          receiver: friends
+            severity: critical
+          receiver: critical_alerts
+
+        # Route for warning alerts
         - match:
-            alertname: LowRandomizeRequestRate
-          receiver: family
+            severity: warning
+          receiver: warning_alerts
+
+        # Route for informational alerts
+        - match:
+            severity: info
+          receiver: info_alerts
+
     receivers:
       - name: me
         email_configs:
           - to: 'adhambasheir000@gmail.com'
-      - name: friends
+
+      - name: critical_alerts
         email_configs:
           - to:
             - 'danielfarag146@gmail.com'
@@ -40,8 +50,19 @@ stringData:
             - 'philopater.mansour@gmail.com'
             - 'seifhendawy1@gmail.com'
             - 'SivoM86@gmail.com'
-      - name: family
+            - 'amrbaghdad@gmail.com'
+            - 'zyad.ashraf1998@gmail.com'
+
+      - name: warning_alerts
         email_configs:
           - to:
-            - 'amrbaghdad@gmail.com'
+            - 'danielfarag146@gmail.com'
+            - 'philopater.mansour.gerais@gmail.com'
+            - 'philopater.mansour@gmail.com'
+
+      - name: info_alerts
+        email_configs:
+          - to:
+            - 'seifhendawy1@gmail.com'
+            - 'SivoM86@gmail.com'
             - 'zyad.ashraf1998@gmail.com'
