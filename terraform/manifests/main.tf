@@ -10,7 +10,7 @@ resource "kubernetes_manifest" "mysql_app" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
+        repoURL        = var.repo
         targetRevision = "main"
         path           = "cd/mysql"
       }
@@ -41,7 +41,7 @@ resource "kubernetes_manifest" "redis_app" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
+        repoURL        = var.repo
         targetRevision = "main"
         path           = "cd/redis"
       }
@@ -82,7 +82,7 @@ resource "kubernetes_manifest" "backend_app" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
+        repoURL        = var.repo
         targetRevision = "main"
         path           = "cd/backend"
       }
@@ -122,7 +122,7 @@ resource "kubernetes_manifest" "frontend_app" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
+        repoURL        = var.repo
         targetRevision = "main"
         path           = "cd/frontend"
       }
@@ -153,7 +153,7 @@ resource "kubernetes_manifest" "gateway-api" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
+        repoURL        = var.repo
         targetRevision = "main"
         path           = "cd/gateway-api"
         kustomize      = {}
@@ -185,7 +185,7 @@ resource "kubernetes_manifest" "monitoring" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "https://github.com/danielfarag/iti-eks-gitops-capstone"
+        repoURL        = var.repo
         targetRevision = "main"
         path           = "cd/monitoring"
         kustomize      = {}
