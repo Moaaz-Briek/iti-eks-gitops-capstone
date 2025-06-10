@@ -10,7 +10,7 @@ ingress:
     - path: /
       service: frontend-service
       port: 80
-    - path: /api
+    - path: /posts
       service: backend-service
       port: 3000
     - path: /mysql
