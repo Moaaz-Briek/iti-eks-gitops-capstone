@@ -1,5 +1,6 @@
 ingress:
   name: iti-ingress
+  namespace: default
   class: nginx
   # clusterIssuer: letsencrypt
   host: itilabs.net
