@@ -1,39 +1,55 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: alerts
-  namespace: monitoring # same namespace where your Prometheus is deployed
+  name: posts-api-alerts
+  namespace: monitoring # same namespace as Prometheus
   labels:
-    release: kube-prometheus-stack # must match the Helm release name!
+    release: kube-prometheus-stack # Ensure this matches the Helm release
     role: alert-rules
 spec:
   groups:
-    - name: randomize-alerts
+    - name: posts-api-alerts
       rules:
-        - alert: HighRandomizeRequestRate
-          expr: sum(rate(randomize_http_requests_total[1m])) * 60 > 10
+        # High request rate alert
+        - alert: HighPostsAPIRequestRate
+          expr: sum(rate(posts_api_requests_total[1m])) * 60 > 100
           for: 1m
           labels:
             severity: warning
           annotations:
-            summary: "High /randomize request rate"
+            summary: "High /posts request rate"
             description: |
-              The /randomize endpoint received more than 10 requests in the last 1 minute.
-        - alert: LowRandomizeRequestRate
-          expr: sum(rate(randomize_http_requests_total[1m])) * 60 < 5
+              The /posts endpoint received more than 100 requests in the last 1 minute.
+
+        # High failure rate alert
+        - alert: HighPostsAPIFailureRate
+          expr: sum(rate(posts_api_failures_total[1m])) / sum(rate(posts_api_requests_total[1m])) > 0.5
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High failure rate for /posts"
+            description: |
+              More than 50% of requests to /posts failed in the last 1 minute.
+
+        # Low request rate alert
+        - alert: LowPostsAPIRequestRate
+          expr: sum(rate(posts_api_requests_total[1m])) * 60 < 5
           for: 1m
           labels:
             severity: info
           annotations:
-            summary: "Low /randomize request rate"
+            summary: "Low /posts request rate"
             description: |
-              The /randomize endpoint received less than 5 requests in the last 1 minute.
-        - alert: NoRandomizeRequestRate
-          expr: sum(rate(randomize_http_requests_total[1m])) * 60 < 1
+              The /posts endpoint received fewer than 5 requests in the last 1 minute.
+
+        # No requests alert
+        - alert: NoPostsAPIRequests
+          expr: sum(rate(posts_api_requests_total[1m])) * 60 < 1
           for: 1m
           labels:
-            severity: info
+            severity: critical
           annotations:
-            summary: "No /randomize requests"
+            summary: "No requests to /posts"
             description: |
-              The /randomize endpoint received no requests in the last 1 minute.
+              The /posts endpoint received no requests in the last 1 minute.
