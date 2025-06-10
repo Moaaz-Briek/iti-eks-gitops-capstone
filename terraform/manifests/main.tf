@@ -70,7 +70,7 @@ resource "kubernetes_manifest" "backend_app" {
       name      = "backend-project"
       namespace = "argocd"
       annotations =  {
-        "argocd-image-updater.argoproj.io/image-list": "backend-node=478614263566.dkr.ecr.us-east-1.amazonaws.com/backend:latest",
+        "argocd-image-updater.argoproj.io/image-list": "backend-node=730335506473.dkr.ecr.us-east-1.amazonaws.com/backend:latest",
         "argocd-image-updater.argoproj.io/write-back-method": "git",
         "argocd-image-updater.argoproj.io/git-branch": "main",
         "argocd-image-updater.argoproj.io/backend-node.update-strategy": "newest-build",
@@ -110,7 +110,7 @@ resource "kubernetes_manifest" "frontend_app" {
       name      = "frontend-project"
       namespace = "argocd"
       annotations =  {
-        "argocd-image-updater.argoproj.io/image-list": "frontend=478614263566.dkr.ecr.us-east-1.amazonaws.com/frontend:latest",
+        "argocd-image-updater.argoproj.io/image-list": "frontend=730335506473.dkr.ecr.us-east-1.amazonaws.com/frontend:latest",
         "argocd-image-updater.argoproj.io/write-back-method": "git",
         "argocd-image-updater.argoproj.io/git-branch": "main",
         "argocd-image-updater.argoproj.io/frontend.update-strategy": "newest-build",

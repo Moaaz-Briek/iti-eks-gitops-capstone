@@ -36,6 +36,10 @@ module "eks" {
 
 module "ecr" {
   source = "./modules/ecr"
+  cluster_name          = var.cluster_name
+  region                = var.aws_region
+  eks_oidc_arn          = module.eks.eks_oidc_arn
+  eks_oidc_issuer       = module.eks.eks_oidc_issuer
 }
 
 module "secrets" {
