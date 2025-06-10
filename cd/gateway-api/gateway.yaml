@@ -25,3 +25,7 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+  # infrastructure:
+  #   annotations:
+  #     service.beta.kubernetes.io/aws-load-balancer-type: "external"
+  #     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
