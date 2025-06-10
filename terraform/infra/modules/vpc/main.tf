@@ -23,8 +23,9 @@ resource "aws_subnet" "public" {
   availability_zone       = local.azs[count.index]
   map_public_ip_on_launch = true
   tags = {
-    Name                     = "eks-public-${local.azs[count.index]}"
-    "kubernetes.io/role/elb" = 1
+    Name                                    = "eks-public-${local.azs[count.index]}"
+    "kubernetes.io/role/elb"                = 1
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 }
 
@@ -35,8 +36,9 @@ resource "aws_subnet" "private" {
   availability_zone       = local.azs[count.index]
   map_public_ip_on_launch = false
   tags = {
-    Name                              = "eks-private-${local.azs[count.index]}"
-    "kubernetes.io/role/internal-elb" = 1
+    Name                                    = "eks-private-${local.azs[count.index]}"
+    "kubernetes.io/role/internal-elb"       = 1
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 }
 

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+  annotations:
+    # service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-0724e82a82adeba77"
+    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-0724e82a82adeba77"
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: https
+      port: 443
+      targetPort: https

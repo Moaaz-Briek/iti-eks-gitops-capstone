@@ -15,3 +15,7 @@ variable "az_count" {
   description = "Number of AZs."
   default     = 3
 }
+
+variable "cluster_name" {
+  type = string
+}

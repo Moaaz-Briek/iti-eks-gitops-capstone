@@ -8,7 +8,7 @@ prometheus:
 
 grafana:
   adminUser: admin
-  adminPassword: admin123
+  adminPassword: password
   service:
     type: LoadBalancer
   defaultDashboardsEnabled: true
