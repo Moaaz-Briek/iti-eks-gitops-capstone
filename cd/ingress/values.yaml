@@ -3,7 +3,7 @@ ingress:
   namespace: default
   class: nginx
   # clusterIssuer: letsencrypt
-  host: itilabs.net
+  host: app.itilabs.net
   # tlsSecret: iticpd-tls-secret
 
   paths:
