@@ -46,5 +46,3 @@ app.use('/posts', postsRouter)
 app.use('/metrics', metricsRouter)
 
 module.exports = app
-
-// test
