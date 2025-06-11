@@ -9,7 +9,7 @@ This project leverages GitHub Actions workflows for automating key CI/CD tasks, 
         1.  **Checkout Repo:** Clones the project repository.
         2.  **Configure AWS credentials:** Sets up AWS credentials using `aws-actions/configure-aws-credentials`.
         3.  **Login to Amazon ECR:** Authenticates Docker to Amazon ECR using `aws-actions/amazon-ecr-login`.
-        4.  **Build and Push Backend Docker image:** Builds the Docker image for the backend (`./backend`) and pushes it to the configured ECR repository (e.g., `730335506473.dkr.ecr.us-east-1.amazonaws.com/backend`) with both `latest` and `github.sha` tags.
+        4.  **Build and Push Backend Docker image:** Builds the Docker image for the backend (`./backend`) and pushes it to the configured ECR repository (e.g., `478614263566.dkr.ecr.us-east-1.amazonaws.com/backend`) with both `latest` and `github.sha` tags.
   * **`build-frontend-images.yaml`:**
       * **Purpose:** Builds the **Angular frontend Docker image** and pushes it to Amazon ECR.
       * **Triggers:** Manually via `workflow_dispatch`.
