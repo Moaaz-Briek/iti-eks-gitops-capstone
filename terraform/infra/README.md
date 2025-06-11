@@ -11,14 +11,15 @@ This directory is responsible for provisioning the foundational AWS infrastructu
     ```terraform
     terraform {
       backend "s3" {
-        bucket  = "iti-graduation-816069170265"
+        bucket  = "iti-graduation-730335506473"
         key = "terraform/state/infra"
         region = "us-east-1"
       }
     }
     ```
+    This block configures Terraform to store its state file in an S3 bucket named `iti-graduation-730335506473` under the key `terraform/state/infra` in the `us-east-1` region. This is crucial for collaborative development and maintaining a reliable state.
 
-    This block configures Terraform to store its state file in an S3 bucket named `iti-graduation-816069170265` under the key `terraform/state/infra` in the `us-east-1` region. This is crucial for collaborative development and maintaining a reliable state.
+    This block configures Terraform to store its state file in an S3 bucket named `iti-graduation-730335506473` under the key `terraform/state/infra` in the `us-east-1` region. This is crucial for collaborative development and maintaining a reliable state.
 
 -   **Data Sources:**
 
@@ -66,19 +67,22 @@ This directory is responsible for provisioning the foundational AWS infrastructu
 
 This directory is responsible for deploying Kubernetes resources (manifests) primarily for ArgoCD applications and secret management. It relies on a Bastion host for execution, as indicated by the GitHub Actions workflow.
 
--   **Backend Configuration (`backend.tf`):**
+* **Backend Configuration (`backend.tf`):**
+    ```terraform
+    terraform {
+      backend "s3" {
+        bucket  = "iti-graduation-730335506473"
+        key = "terraform/state/infra-manifests"
+        region = "us-east-1"
+      }
+    }
+    ```
+    This state file is stored in the same S3 bucket but with a different key: `terraform/state/infra-manifests`.
 
         ```terraform
         terraform {
           backend "s3" {
-
-    <<<<<<< HEAD
-    bucket = "iti-graduation-816069170265"
-    =======
-    bucket = "iti-graduation-478614263566"
-
-    > > > > > > > c1519b92c6dbcf88c858944d5fff8f4fc1642cb7
-
+            bucket = "iti-graduation-730335506473"
             key = "terraform/state/infra-manifests"
             region = "us-east-1"
           }
@@ -94,10 +98,17 @@ This directory is responsible for deploying Kubernetes resources (manifests) pri
 
 -   **Kubernetes Manifests (ArgoCD Applications):**
     These `kubernetes_manifest` resources define **ArgoCD `Application` objects**. Each `Application` tells ArgoCD how to deploy a specific part of your application or monitoring stack by pointing to a Helm chart or Kustomize directory in your Git repository.
+    * `mysql_app`, `redis_app`, `ingress_app`: Deploy their respective Helm charts from `cd/mysql`, `cd/redis`, and `cd/ingress`. They are configured for automated synchronization with pruning and self-healing.
+    * `backend_app`, `frontend_app`: Deploy their Helm charts from `cd/backend` and `cd/frontend`. Crucially, these include **annotations for ArgoCD Image Updater**. These annotations instruct ArgoCD to:
+        * Monitor ECR images (`730335506473.dkr.ecr.us-east-1.amazonaws.com/backend:latest`, `frontend:latest`).
+        * Use `git` as the write-back method to update the `main` branch.
+        * Update the image tag using the `newest-build` strategy.
+        * Target `helmvalues:values.yaml` and update the `image.tag` and `image.repository` fields within the Helm chart's `values.yaml` file. This is the core of your GitOps image update strategy.
+    * `monitoring`: Deploys the Kustomize resources from `cd/monitoring` into the `monitoring` namespace, also with automated sync.
 
     -   `mysql_app`, `redis_app`, `ingress_app`: Deploy their respective Helm charts from `cd/mysql`, `cd/redis`, and `cd/ingress`. They are configured for automated synchronization with pruning and self-healing.
     -   `backend_app`, `frontend_app`: Deploy their Helm charts from `cd/backend` and `cd/frontend`. Crucially, these include **annotations for ArgoCD Image Updater**. These annotations instruct ArgoCD to:
-        -   Monitor ECR images (`816069170265.dkr.ecr.us-east-1.amazonaws.com/backend:latest`, `frontend:latest`).
+        -   Monitor ECR images (`730335506473.dkr.ecr.us-east-1.amazonaws.com/backend:latest`, `frontend:latest`).
         -   Use `git` as the write-back method to update the `main` branch.
         -   Update the image tag using the `newest-build` strategy.
         -   Target `helmvalues:values.yaml` and update the `image.tag` and `image.repository` fields within the Helm chart's `values.yaml` file. This is the core of your GitOps image update strategy.
@@ -127,7 +138,7 @@ This directory deploys critical platform components on your EKS cluster using He
     ```terraform
     terraform {
       backend "s3" {
-        bucket  = "iti-graduation-816069170265"
+        bucket  = "iti-graduation-730335506473"
         key = "terraform/state/infra-platform"
         region = "us-east-1"
       }
@@ -142,8 +153,9 @@ This directory deploys critical platform components on your EKS cluster using He
 
 -   **Local Values (`locals.tf`):**
 
-    -   `ecr_domain`: Extracts the ECR domain from the `ecr_url`.
-    -   `ebs_name`: Gets the name of the EBS CSI manifest (likely for dependency management).
+* **Custom Kubernetes Manifests:**
+    * `kubernetes_manifest "letsencrypt_issuer"`: Defines a `ClusterIssuer` for `cert-manager` named `letsencrypt`, using the `ACME` protocol with Let's Encrypt for automatic certificate issuance. It specifies an email for notifications and uses HTTP-01 challenges via the `nginx` ingress class.
+    * `kubernetes_manifest "app_certificate"`, `argocd_certificate`, `jenkins_certificate`, `prometheus_certificate`, `grafana_certificate`, `alertmanager_certificate`: These resources define individual `Certificate` objects for each application/tool, instructing `cert-manager` to obtain and manage TLS certificates for their respective domain names (e.g., `app.danielfarag.cloud`, `argocd.danielfarag.cloud`) using the `letsencrypt` ClusterIssuer.
 
 -   **Kubernetes and Helm Deployments:**
 

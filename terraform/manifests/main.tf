@@ -98,14 +98,14 @@ resource "kubernetes_manifest" "backend_app" {
     metadata = {
       name      = "backend-project"
       namespace = "argocd"
-      annotations = {
-        "argocd-image-updater.argoproj.io/image-list" : "backend-node=816069170265.dkr.ecr.us-east-1.amazonaws.com/backend:latest",
-        "argocd-image-updater.argoproj.io/write-back-method" : "git",
-        "argocd-image-updater.argoproj.io/git-branch" : "main",
-        "argocd-image-updater.argoproj.io/backend-node.update-strategy" : "newest-build",
-        "argocd-image-updater.argoproj.io/write-back-target" : "helmvalues:values.yaml",
-        "argocd-image-updater.argoproj.io/backend-node.helm.image-tag" : "image.tag",
-        "argocd-image-updater.argoproj.io/backend-node.helm.image-name" : "image.repository"
+      annotations =  {
+        "argocd-image-updater.argoproj.io/image-list": "backend-node=730335506473.dkr.ecr.us-east-1.amazonaws.com/backend:latest",
+        "argocd-image-updater.argoproj.io/write-back-method": "git",
+        "argocd-image-updater.argoproj.io/git-branch": "main",
+        "argocd-image-updater.argoproj.io/backend-node.update-strategy": "newest-build",
+        "argocd-image-updater.argoproj.io/write-back-target": "helmvalues:values.yaml",
+        "argocd-image-updater.argoproj.io/backend-node.helm.image-tag": "image.tag",
+        "argocd-image-updater.argoproj.io/backend-node.helm.image-name": "image.repository"
       }
     }
     spec = {
@@ -138,14 +138,14 @@ resource "kubernetes_manifest" "frontend_app" {
     metadata = {
       name      = "frontend-project"
       namespace = "argocd"
-      annotations = {
-        "argocd-image-updater.argoproj.io/image-list" : "frontend=816069170265.dkr.ecr.us-east-1.amazonaws.com/frontend:latest",
-        "argocd-image-updater.argoproj.io/write-back-method" : "git",
-        "argocd-image-updater.argoproj.io/git-branch" : "main",
-        "argocd-image-updater.argoproj.io/frontend.update-strategy" : "newest-build",
-        "argocd-image-updater.argoproj.io/write-back-target" : "helmvalues:values.yaml",
-        "argocd-image-updater.argoproj.io/frontend.helm.image-tag" : "image.tag",
-        "argocd-image-updater.argoproj.io/frontend.helm.image-name" : "image.repository"
+      annotations =  {
+        "argocd-image-updater.argoproj.io/image-list": "frontend=730335506473.dkr.ecr.us-east-1.amazonaws.com/frontend:latest",
+        "argocd-image-updater.argoproj.io/write-back-method": "git",
+        "argocd-image-updater.argoproj.io/git-branch": "main",
+        "argocd-image-updater.argoproj.io/frontend.update-strategy": "newest-build",
+        "argocd-image-updater.argoproj.io/write-back-target": "helmvalues:values.yaml",
+        "argocd-image-updater.argoproj.io/frontend.helm.image-tag": "image.tag",
+        "argocd-image-updater.argoproj.io/frontend.helm.image-name": "image.repository"
       }
     }
     spec = {

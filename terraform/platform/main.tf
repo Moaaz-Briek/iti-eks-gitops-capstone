@@ -107,12 +107,12 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
     metadata = {
-      name      = "letsencrypt"
+      name = "letsencrypt"
     }
     spec = {
       acme = {
-        email   = var.cert-email
-        server  = "https://acme-v02.api.letsencrypt.org/directory"
+        email  = var.cert-email
+        server = "https://acme-v02.api.letsencrypt.org/directory"
         privateKeySecretRef = {
           name = "letsencrypt-tls-secret"
         }
@@ -140,7 +140,7 @@ resource "kubernetes_manifest" "app_certificate" {
     }
     spec = {
       secretName = "app-tls"
-      dnsNames  = ["app.${var.domain_name}"]
+      dnsNames   = ["app.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -148,7 +148,7 @@ resource "kubernetes_manifest" "app_certificate" {
     }
   }
 
-  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [kubernetes_manifest.letsencrypt_issuer]
 }
 
 resource "kubernetes_manifest" "argocd_certificate" {
@@ -161,7 +161,7 @@ resource "kubernetes_manifest" "argocd_certificate" {
     }
     spec = {
       secretName = "argocd-tls"
-      dnsNames  = ["argocd.${var.domain_name}"]
+      dnsNames   = ["argocd.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -169,7 +169,7 @@ resource "kubernetes_manifest" "argocd_certificate" {
     }
   }
 
-  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [kubernetes_manifest.letsencrypt_issuer]
 }
 
 resource "kubernetes_manifest" "jenkins_certificate" {
@@ -182,7 +182,7 @@ resource "kubernetes_manifest" "jenkins_certificate" {
     }
     spec = {
       secretName = "jenkins-tls"
-      dnsNames  = ["jenkins.${var.domain_name}"]
+      dnsNames   = ["jenkins.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -190,7 +190,7 @@ resource "kubernetes_manifest" "jenkins_certificate" {
     }
   }
 
-  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [kubernetes_manifest.letsencrypt_issuer]
 }
 
 resource "kubernetes_manifest" "prometheus_certificate" {
@@ -203,7 +203,7 @@ resource "kubernetes_manifest" "prometheus_certificate" {
     }
     spec = {
       secretName = "prometheus-tls"
-      dnsNames  = ["prometheus.${var.domain_name}"]
+      dnsNames   = ["prometheus.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -211,7 +211,7 @@ resource "kubernetes_manifest" "prometheus_certificate" {
     }
   }
 
-  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [kubernetes_manifest.letsencrypt_issuer]
 }
 
 resource "kubernetes_manifest" "grafana_certificate" {
@@ -224,7 +224,7 @@ resource "kubernetes_manifest" "grafana_certificate" {
     }
     spec = {
       secretName = "grafana-tls"
-      dnsNames  = ["grafana.${var.domain_name}"]
+      dnsNames   = ["grafana.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -232,7 +232,7 @@ resource "kubernetes_manifest" "grafana_certificate" {
     }
   }
 
-  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [kubernetes_manifest.letsencrypt_issuer]
 }
 
 resource "kubernetes_manifest" "alertmanager_certificate" {
@@ -245,7 +245,7 @@ resource "kubernetes_manifest" "alertmanager_certificate" {
     }
     spec = {
       secretName = "alertmanager-tls"
-      dnsNames  = ["alertmanager.${var.domain_name}"]
+      dnsNames   = ["alertmanager.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -253,7 +253,7 @@ resource "kubernetes_manifest" "alertmanager_certificate" {
     }
   }
 
-  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [kubernetes_manifest.letsencrypt_issuer]
 }
 
 

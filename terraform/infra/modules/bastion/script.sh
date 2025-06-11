@@ -28,7 +28,6 @@ snap install amazon-ssm-agent --classic
 systemctl enable amazon-ssm-agent
 systemctl restart amazon-ssm-agent  
 
+echo "sudo rm -r /root/iti-eks; git clone https://github.com/danielfarag/iti-eks-gitops-capstone /root/iti-eks" > /root/pull.sh 
 
-git clone https://github.com/danielfarag/iti-eks-gitops-capstone /root/iti-eks
-
-
+chmod +x /root/pull.sh
