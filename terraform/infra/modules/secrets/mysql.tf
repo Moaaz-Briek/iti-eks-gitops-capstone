@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "mysql_credentials" {
   name = "mysql-credentials"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "mysql_credentials_version" {

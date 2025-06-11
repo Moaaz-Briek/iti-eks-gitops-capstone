@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "redis_credentials" {
   name = "redis-credentials"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "redis_credentials_version" {
