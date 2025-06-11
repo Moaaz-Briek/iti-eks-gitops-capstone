@@ -35,6 +35,9 @@ dmanifests:
 	@terraform -chdir=terraform/manifests init
 	@terraform -chdir=terraform/manifests destroy -var-file="vars.tfvars"  --auto-approve
 
+connect:
+	@read -p "Instance: " instance; \
+	aws ssm start-session --target $$instance
 
 apply: infra platform manifests
 clean: dmanifests dplatform dinfra

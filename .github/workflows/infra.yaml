@@ -52,14 +52,6 @@ jobs:
           EOF
           cat backend.tf
 
-      - name: Delete mysql-credentials secret
-        run: |
-          aws secretsmanager delete-secret --secret-id mysql-credentials --force-delete-without-recovery || true 
-
-      - name: Delete redis-credentials secret
-        run: |
-          aws secretsmanager delete-secret --secret-id redis-credentials --force-delete-without-recovery || true
-
       - name: Terraform Init
         working-directory: terraform/infra
         run: terraform init
