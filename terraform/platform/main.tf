@@ -150,7 +150,6 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
     kind       = "ClusterIssuer"
     metadata = {
       name      = "letsencrypt"
-      namespace = "cert-manager"
     }
     spec = {
       acme = {
@@ -175,7 +174,7 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
   depends_on = [ helm_release.certbot ]
 }
 
-resource "kubernetes_manifest" "mydomain_certificate" {
+resource "kubernetes_manifest" "app_certificate" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"
@@ -196,7 +195,7 @@ resource "kubernetes_manifest" "mydomain_certificate" {
   depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
 }
 
-resource "kubernetes_manifest" "mydomain_certificate" {
+resource "kubernetes_manifest" "argocd_certificate" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"
@@ -217,7 +216,7 @@ resource "kubernetes_manifest" "mydomain_certificate" {
   depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
 }
 
-resource "kubernetes_manifest" "mydomain_certificate" {
+resource "kubernetes_manifest" "jenkins_certificate" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"
@@ -238,7 +237,7 @@ resource "kubernetes_manifest" "mydomain_certificate" {
   depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
 }
 
-resource "kubernetes_manifest" "mydomain_certificate" {
+resource "kubernetes_manifest" "prometheus_certificate" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"
@@ -259,7 +258,7 @@ resource "kubernetes_manifest" "mydomain_certificate" {
   depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
 }
 
-resource "kubernetes_manifest" "mydomain_certificate" {
+resource "kubernetes_manifest" "grafana_certificate" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"
@@ -280,7 +279,7 @@ resource "kubernetes_manifest" "mydomain_certificate" {
   depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
 }
 
-resource "kubernetes_manifest" "mydomain_certificate" {
+resource "kubernetes_manifest" "alertmanager_certificate" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"

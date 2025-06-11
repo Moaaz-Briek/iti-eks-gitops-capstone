@@ -29,5 +29,7 @@ server:
     hostname: ${argocd_host}
     path: /
     pathType: Prefix
-    tls: true
-    tlsSecret: argocd-server-tls
+    tls:
+      - hosts:
+          - ${argocd_host}
+        secretName: argocd-server-tls
