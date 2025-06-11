@@ -13,7 +13,7 @@ on:
           - destroy
 
 env:
-  TF_VAR_node_instance_types: '["t3.medium"]'
+  TF_VAR_node_instance_types: '["${{ vars.INSTANCE_TYPE }}"]'
   TF_VAR_cluster_name: "gitops-eks-cluster"
   TF_VAR_bucket: "${{ vars.BUCKET_NAME }}"
 
