@@ -10,8 +10,14 @@ configs:
         ignoreDifferences: |
           jsonPointers:
             - /status
+
 global:
   domain: ${argocd_host}
+
+crds:
+  install: true
+  keep: true
+
 server:
   service:
     type: ClusterIP
@@ -32,4 +38,4 @@ server:
     tls:
       - hosts:
           - ${argocd_host}
-        secretName: argocd-server-tls
+        secretName: argocd-tls
