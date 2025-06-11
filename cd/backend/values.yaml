@@ -4,17 +4,17 @@ image:
   repository: 730335506473.dkr.ecr.us-east-1.amazonaws.com/backend
   tag: "ad2fb54aabf23baaec8ea7be8c7347e07d9e2689"
 service:
-  name: backend-service
-  type: ClusterIP
-  port: 3000
-  targetPort: 3000
+    name: backend-service
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
 resources:
-  limits:
-    cpu: 100m
-    memory: 128Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
+    limits:
+        cpu: 100m
+        memory: 128Mi
+    requests:
+        cpu: 100m
+        memory: 128Mi
 secret:
-  mysql: mysql-k8s-secret
-  redis: redis-k8s-secret
+    mysql: mysql-k8s-secret
+    redis: redis-k8s-secret
