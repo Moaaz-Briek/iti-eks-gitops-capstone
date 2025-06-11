@@ -1,7 +1,11 @@
 replicaCount: 1
 name: frontend
 image:
+<<<<<<< HEAD
   repository: 478614263566.dkr.ecr.us-east-1.amazonaws.com/frontend
+=======
+  repository: 730335506473.dkr.ecr.us-east-1.amazonaws.com/frontend
+>>>>>>> 110f52e5127848b360edee00f1376990aaa2a20c
   tag: latest
 resources:
   limits:
