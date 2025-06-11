@@ -1,5 +1,5 @@
 locals {
-  repos = ["backend", "frontend", "mysql", "redis", "jenkins/inbound-agent", "jenkins/kaniko"]
+  repos = ["backend", "frontend"]
 }
 
 resource "aws_ecr_repository" "ecr" {

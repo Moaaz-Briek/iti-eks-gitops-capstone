@@ -11,9 +11,6 @@ resource "kubernetes_secret" "argocd_image_updater_secret" {
   metadata {
     name      = "aws-token"
     namespace = "argocd"
-    labels = {
-      "argocd.argoproj.io/secret-type" = "repository"
-    }
   }
 
   data = {

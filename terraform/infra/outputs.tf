@@ -34,11 +34,6 @@ output "ecr_url" {
 }
 
 
-output "terraform_pod_role_arn" {
-  value = module.eks.terraform_pod_role_arn
-}
-
-
 output "ecr_token" {
   value = module.ecr.ecr_password
 }
@@ -47,4 +42,9 @@ output "ecr_token" {
 ##################### EXTERNAL SECRET  ###################
 output "external_secrets_role_arn" {
   value = module.secrets.external_secrets_role_arn
+}
+
+
+output "jenkins_kaniko_role_arn" {
+  value = module.ecr.jenkins_kaniko_role_arn
 }

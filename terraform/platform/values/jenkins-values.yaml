@@ -3,8 +3,11 @@ controller:
   servicePort: 80
   admin:
     password: password
-  additionalPlugins: 
-  # - workflow-aggregator
+  installPlugins:
+    - workflow-aggregator
+    - kubernetes
+    - github
+    
   ingress:
     enabled: true
     ingressClassName: nginx

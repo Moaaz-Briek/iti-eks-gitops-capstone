@@ -100,44 +100,24 @@ resource "aws_iam_role_policy_attachment" "ebs_csi_driver_role_attachment" {
   policy_arn = aws_iam_policy.ebs_csi_driver.arn
 }
 
-##########################################################################
-######################### Terraform Deployment ###########################
-##########################################################################
-resource "aws_iam_role" "terraform_pod_role" {
-  name = "${var.cluster_name}-terraform-pod-role" 
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}"
-      }
-      Action = "sts:AssumeRoleWithWebIdentity"
-      Condition = {
-        StringEquals = {
-          "${replace(aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}:sub": "system:serviceaccount:default:tf-sa",
-          "${replace(aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}:aud": "sts.amazonaws.com"
-        }
-      }
-    }]
-  })
-
-  inline_policy {
-    name = "terraform-s3-backend-access"
-    policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = [
-        {
-          Effect = "Allow"
-          Action = ["s3:*"]
-          Resource = ["*"]
-        },
-      ]
-    })
-  }
+######################################################################################
+######################### Admin Permission TO Bastion ################################
+######################################################################################
+resource "aws_eks_access_entry" "bastion_host" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = var.bastion_role_arn
+  type = "STANDARD"
 }
 
+resource "aws_eks_access_policy_association" "bastion_server_association" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = aws_eks_access_entry.bastion_host.principal_arn
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy" 
+
+  access_scope {
+    type = "cluster"
+  }
+}
 
 
 ######################################################################################
@@ -152,26 +132,6 @@ resource "aws_eks_access_entry" "current_user_access" {
 resource "aws_eks_access_policy_association" "current_user_admin_policy" {
   cluster_name  = aws_eks_cluster.this.name
   principal_arn = aws_eks_access_entry.current_user_access.principal_arn
-  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy" 
-
-  access_scope {
-    type = "cluster"
-  }
-}
-
-
-######################################################################################
-######################### Admin Permission TO Bastion ################################
-######################################################################################
-resource "aws_eks_access_entry" "bastion_host" {
-  cluster_name  = aws_eks_cluster.this.name
-  principal_arn = var.bastion_role_arn
-  type = "STANDARD"
-}
-
-resource "aws_eks_access_policy_association" "bastion_server_association" {
-  cluster_name  = aws_eks_cluster.this.name
-  principal_arn = aws_eks_access_entry.bastion_host.principal_arn
   policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy" 
 
   access_scope {
