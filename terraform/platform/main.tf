@@ -142,3 +142,161 @@ module "route53" {
   alertmanager_host = "alertmanager.${var.domain_name}"
   app_host          = "app.${var.domain_name}"
 }
+
+
+resource "kubernetes_manifest" "letsencrypt_issuer" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name      = "letsencrypt"
+      namespace = "cert-manager"
+    }
+    spec = {
+      acme = {
+        email   = var.cert-email
+        server  = "https://acme-v02.api.letsencrypt.org/directory"
+        privateKeySecretRef = {
+          name = "letsencrypt-tls-secret"
+        }
+        solvers = [
+          {
+            http01 = {
+              ingress = {
+                class = "nginx"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+
+  depends_on = [ helm_release.certbot ]
+}
+
+resource "kubernetes_manifest" "mydomain_certificate" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "app-cert"
+      namespace = "default"
+    }
+    spec = {
+      secretName = "app-tls"
+      dnsNames  = ["app.itilabs.net"]
+      issuerRef = {
+        name = "letsencrypt"
+        kind = "ClusterIssuer"
+      }
+    }
+  }
+
+  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+}
+
+resource "kubernetes_manifest" "mydomain_certificate" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "argocd-cert"
+      namespace = "default"
+    }
+    spec = {
+      secretName = "argocd-tls"
+      dnsNames  = ["argocd.itilabs.net"]
+      issuerRef = {
+        name = "letsencrypt"
+        kind = "ClusterIssuer"
+      }
+    }
+  }
+
+  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+}
+
+resource "kubernetes_manifest" "mydomain_certificate" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "jenkins-cert"
+      namespace = "default"
+    }
+    spec = {
+      secretName = "jenkins-tls"
+      dnsNames  = ["jenkins.itilabs.net"]
+      issuerRef = {
+        name = "letsencrypt"
+        kind = "ClusterIssuer"
+      }
+    }
+  }
+
+  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+}
+
+resource "kubernetes_manifest" "mydomain_certificate" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "prometheus-cert"
+      namespace = "default"
+    }
+    spec = {
+      secretName = "prometheus-tls"
+      dnsNames  = ["prometheus.itilabs.net"]
+      issuerRef = {
+        name = "letsencrypt"
+        kind = "ClusterIssuer"
+      }
+    }
+  }
+
+  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+}
+
+resource "kubernetes_manifest" "mydomain_certificate" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "grafana-cert"
+      namespace = "default"
+    }
+    spec = {
+      secretName = "grafana-tls"
+      dnsNames  = ["grafana.itilabs.net"]
+      issuerRef = {
+        name = "letsencrypt"
+        kind = "ClusterIssuer"
+      }
+    }
+  }
+
+  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+}
+
+resource "kubernetes_manifest" "mydomain_certificate" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "alertmanager-cert"
+      namespace = "default"
+    }
+    spec = {
+      secretName = "alertmanager-tls"
+      dnsNames  = ["alertmanager.itilabs.net"]
+      issuerRef = {
+        name = "letsencrypt"
+        kind = "ClusterIssuer"
+      }
+    }
+  }
+
+  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+}

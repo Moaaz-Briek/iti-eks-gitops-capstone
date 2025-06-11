@@ -19,8 +19,3 @@ variable "github_name" {
 variable "github_token" {
   type = string
 }
-
-
-variable "cert-email" {
-  type = string
-}

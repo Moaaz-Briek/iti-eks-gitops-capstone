@@ -11,3 +11,7 @@ variable "bucket" {
 variable "domain_name" {
   type = string
 }
+
+variable "cert-email" {
+  type = string
+}
