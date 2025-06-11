@@ -1,5 +1,5 @@
 resource "kubernetes_manifest" "mysql_app" {
-  depends_on = [ kubernetes_secret.repo ]
+  depends_on = [kubernetes_secret.repo]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
@@ -20,8 +20,8 @@ resource "kubernetes_manifest" "mysql_app" {
       }
       syncPolicy = {
         automated = {
-          prune     = true
-          selfHeal  = true
+          prune    = true
+          selfHeal = true
         }
       }
     }
@@ -30,7 +30,7 @@ resource "kubernetes_manifest" "mysql_app" {
 
 
 resource "kubernetes_manifest" "redis_app" {
-  depends_on = [ kubernetes_secret.repo ]
+  depends_on = [kubernetes_secret.repo]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
@@ -51,8 +51,8 @@ resource "kubernetes_manifest" "redis_app" {
       }
       syncPolicy = {
         automated = {
-          prune     = true
-          selfHeal  = true
+          prune    = true
+          selfHeal = true
         }
       }
     }
@@ -60,7 +60,7 @@ resource "kubernetes_manifest" "redis_app" {
 }
 
 resource "kubernetes_manifest" "ingress_app" {
-  depends_on = [ kubernetes_secret.repo ]
+  depends_on = [kubernetes_secret.repo]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
@@ -81,8 +81,8 @@ resource "kubernetes_manifest" "ingress_app" {
       }
       syncPolicy = {
         automated = {
-          prune     = true
-          selfHeal  = true
+          prune    = true
+          selfHeal = true
         }
       }
     }
@@ -91,7 +91,7 @@ resource "kubernetes_manifest" "ingress_app" {
 
 
 resource "kubernetes_manifest" "backend_app" {
-  depends_on = [ kubernetes_secret.repo ]
+  depends_on = [kubernetes_secret.repo]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
@@ -121,8 +121,8 @@ resource "kubernetes_manifest" "backend_app" {
       }
       syncPolicy = {
         automated = {
-          prune     = true
-          selfHeal  = true
+          prune    = true
+          selfHeal = true
         }
       }
     }
@@ -131,7 +131,7 @@ resource "kubernetes_manifest" "backend_app" {
 
 
 resource "kubernetes_manifest" "frontend_app" {
-  depends_on = [ kubernetes_secret.repo ]
+  depends_on = [kubernetes_secret.repo]
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
     kind       = "Application"
@@ -161,8 +161,8 @@ resource "kubernetes_manifest" "frontend_app" {
       }
       syncPolicy = {
         automated = {
-          prune     = true
-          selfHeal  = true
+          prune    = true
+          selfHeal = true
         }
       }
     }

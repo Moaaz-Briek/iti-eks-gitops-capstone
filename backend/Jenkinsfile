@@ -24,7 +24,7 @@ pipeline {
   }
 
   environment {
-    ECR_REPO = "816069170265.dkr.ecr.us-east-1.amazonaws.com"
+    ECR_REPO = "730335506473.dkr.ecr.us-east-1.amazonaws.com"
     IMAGE_NAME = "backend"
     GITHUB_URL = "https://github.com/danielfarag/iti-eks-gitops-capstone"
   }

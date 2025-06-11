@@ -1,4 +1,3 @@
-
 ### 🚀 3. CD Tool – ArgoCD + Argo Image Updater
 
 ArgoCD is the core of the Continuous Delivery strategy, implementing GitOps principles. The `cd` directory contains the Kubernetes manifests managed by ArgoCD.
