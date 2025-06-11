@@ -10,15 +10,15 @@ prometheus:
     ingressClassName: nginx
     annotations:
       kubernetes.io/ingress.class: nginx
-      # cert-manager.io/cluster-issuer: "letsencrypt"
+      cert-manager.io/cluster-issuer: "letsencrypt"
     hosts:
       - ${prometheus_host}
     paths:
       - /
-    # tls:
-    #   - secretName: prometheus-tls
-    #     hosts:
-    #       - ${prometheus_host}
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - ${prometheus_host}
 
 grafana:
   adminUser: admin
@@ -31,14 +31,14 @@ grafana:
     ingressClassName: nginx
     annotations:
       kubernetes.io/ingress.class: nginx
-      # cert-manager.io/cluster-issuer: "letsencrypt"
+      cert-manager.io/cluster-issuer: "letsencrypt"
     hosts:
       - ${grafana_host}
     path: /
-    # tls:
-    #   - secretName: grafana-tls
-    #     hosts:
-    #       - ${grafana_host}
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - ${grafana_host}
 
 alertmanager:
   service:
@@ -48,12 +48,12 @@ alertmanager:
     ingressClassName: nginx
     annotations:
       kubernetes.io/ingress.class: nginx
-      # cert-manager.io/cluster-issuer: "letsencrypt"
+      cert-manager.io/cluster-issuer: "letsencrypt"
     hosts:
       - ${alertmanager_host}
     paths:
       - /
-    # tls:
-    #   - secretName: alertmanager-tls
-    #     hosts:
-    #       - ${alertmanager_host}
+    tls:
+      - secretName: alertmanager-tls
+        hosts:
+          - ${alertmanager_host}

@@ -2,9 +2,9 @@ ingress:
   name: app-ingress
   namespace: default
   class: nginx
-  # clusterIssuer: letsencrypt
+  clusterIssuer: letsencrypt
   host: app.itilabs.net
-  # tlsSecret: iticpd-tls-secret
+  tlsSecret: app-tls
 
   paths:
     - path: /

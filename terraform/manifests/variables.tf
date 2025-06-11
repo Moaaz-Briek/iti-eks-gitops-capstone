@@ -15,6 +15,12 @@ variable "repo" {
 variable "github_name" {
   type = string
 }
+
 variable "github_token" {
+  type = string
+}
+
+
+variable "cert-email" {
   type = string
 }

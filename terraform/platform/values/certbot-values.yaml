@@ -1,0 +1,5 @@
+global:
+  namespace: cert-manager
+
+cert-manager:
+  enableCrdInstall: true

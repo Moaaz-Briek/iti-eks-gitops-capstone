@@ -10,13 +10,13 @@ controller:
     ingressClassName: nginx
     annotations:
       kubernetes.io/ingress.class: nginx
-      # cert-manager.io/cluster-issuer: "letsencrypt"
+      cert-manager.io/cluster-issuer: "letsencrypt"
     hostName: ${jenkins_host}
     path: /
-    # tls:
-    #   - hosts:
-    #       - ${jenkins_host}
-    #     secretName: jenkins-tls
+    tls:
+      - hosts:
+          - ${jenkins_host}
+        secretName: jenkins-tls
 
 persistence:
   enabled: true

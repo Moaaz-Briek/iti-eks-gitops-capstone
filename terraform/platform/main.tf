@@ -109,6 +109,23 @@ resource "helm_release" "kube_prometheus_stack" {
   ]
 }
 
+resource "helm_release" "certbot" {
+  name       = "certbot"
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  version    = "v1.8.0"
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+
+  values = [
+    file("values/certbot-values.yaml")
+  ]
+}
+
+
 module "nginx-ingress" {
   source       = "./ingress-controller"
   eks_core_dns = var.domain_name
