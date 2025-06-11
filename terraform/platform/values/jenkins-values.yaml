@@ -3,12 +3,12 @@ controller:
     servicePort: 80
     admin:
         password: password
-    image:
-        registry: 'docker.io'
-        repository: 'moaaz6briek/jenkins-with-pipelines'
-        tag: '1.0.0'
-    installPlugins: false
-    imagePullPolicy: 'Always'
+    # image:
+    #     registry: 'docker.io'
+    #     repository: 'moaaz6briek/jenkins-with-pipelines'
+    #     tag: '1.0.2'
+    # installPlugins: false
+    # imagePullPolicy: 'Always'
 
     ingress:
         enabled: true
@@ -22,7 +22,6 @@ controller:
             - hosts:
                   - ${jenkins_host}
               secretName: jenkins-tls
-
 persistence:
     enabled: true
     storageClass: ebs-csi

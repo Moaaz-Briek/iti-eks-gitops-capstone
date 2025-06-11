@@ -35,7 +35,7 @@ pipeline {
         container('git') {
           script {
             git branch: 'main', url: env.GITHUB_URL
-            sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/k8s'
+            sh "git config --global --add safe.directory /home/jenkins/agent/workspace/${env.IMAGE_NAME}"
 
             def gitShortCommit = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
 

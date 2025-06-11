@@ -140,7 +140,7 @@ resource "kubernetes_manifest" "app_certificate" {
     }
     spec = {
       secretName = "app-tls"
-      dnsNames  = ["app.itilabs.net"]
+      dnsNames  = ["app.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -161,7 +161,7 @@ resource "kubernetes_manifest" "argocd_certificate" {
     }
     spec = {
       secretName = "argocd-tls"
-      dnsNames  = ["argocd.itilabs.net"]
+      dnsNames  = ["argocd.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -182,7 +182,7 @@ resource "kubernetes_manifest" "jenkins_certificate" {
     }
     spec = {
       secretName = "jenkins-tls"
-      dnsNames  = ["jenkins.itilabs.net"]
+      dnsNames  = ["jenkins.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -203,7 +203,7 @@ resource "kubernetes_manifest" "prometheus_certificate" {
     }
     spec = {
       secretName = "prometheus-tls"
-      dnsNames  = ["prometheus.itilabs.net"]
+      dnsNames  = ["prometheus.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -224,7 +224,7 @@ resource "kubernetes_manifest" "grafana_certificate" {
     }
     spec = {
       secretName = "grafana-tls"
-      dnsNames  = ["grafana.itilabs.net"]
+      dnsNames  = ["grafana.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -245,7 +245,7 @@ resource "kubernetes_manifest" "alertmanager_certificate" {
     }
     spec = {
       secretName = "alertmanager-tls"
-      dnsNames  = ["alertmanager.itilabs.net"]
+      dnsNames  = ["alertmanager.${var.domain_name}"]
       issuerRef = {
         name = "letsencrypt"
         kind = "ClusterIssuer"
@@ -273,4 +273,3 @@ module "route53" {
   alertmanager_host = "alertmanager.${var.domain_name}"
   app_host          = "app.${var.domain_name}"
 }
-
