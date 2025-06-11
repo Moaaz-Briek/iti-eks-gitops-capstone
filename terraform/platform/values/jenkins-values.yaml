@@ -3,13 +3,6 @@ controller:
     servicePort: 80
     admin:
         password: password
-    # image:
-    #     registry: 'docker.io'
-    #     repository: 'moaaz6briek/jenkins-with-pipelines'
-    #     tag: '1.0.2'
-    # installPlugins: false
-    # imagePullPolicy: 'Always'
-
     ingress:
         enabled: true
         ingressClassName: nginx
