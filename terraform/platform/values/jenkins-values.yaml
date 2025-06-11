@@ -1,28 +1,30 @@
 controller:
-  serviceType: ClusterIP
-  servicePort: 80
-  admin:
-    password: password
-  installPlugins:
-    - workflow-aggregator
-    - kubernetes
-    - github
-    
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      cert-manager.io/cluster-issuer: "letsencrypt"
-    hostName: ${jenkins_host}
-    path: /
-    tls:
-      - hosts:
-          - ${jenkins_host}
-        secretName: jenkins-tls
+    serviceType: ClusterIP
+    servicePort: 80
+    admin:
+        password: password
+    image:
+        registry: 'docker.io'
+        repository: 'moaaz6briek/jenkins-with-pipelines'
+        tag: '1.0.0'
+    installPlugins: false
+    imagePullPolicy: 'Always'
+
+    ingress:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+            kubernetes.io/ingress.class: nginx
+            cert-manager.io/cluster-issuer: 'letsencrypt'
+        hostName: ${jenkins_host}
+        path: /
+        tls:
+            - hosts:
+                  - ${jenkins_host}
+              secretName: jenkins-tls
 
 persistence:
-  enabled: true
-  storageClass: ebs-csi
-  size: 3Gi
-  accessMode: ReadWriteOnce
+    enabled: true
+    storageClass: ebs-csi
+    size: 3Gi
+    accessMode: ReadWriteOnce
