@@ -9,6 +9,7 @@ module.exports = {
     
     redis: {
         host: process.env.REDIS_HOST || 'redis',
+        username: process.env.REDIS_USER || 'root',
         password: process.env.REDIS_PASSWORD || 'PASSWORD',
         db: process.env.REDIS_DB || 0,
     },
