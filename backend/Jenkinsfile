@@ -62,4 +62,35 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            slackSend(
+                color: "good",
+                message: "✅ *SUCCESS*: Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}` completed successfully.\n" +
+                        "Branch: `${env.GIT_BRANCH}`\n" +
+                        "Duration: ${currentBuild.durationString}\n" +
+                        "View: ${env.BUILD_URL}"
+            )
+        }
+
+        failure {
+            slackSend(
+                color: "danger",
+                message: "❌ *FAILED*: Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}` failed.\n" +
+                        "Branch: `${env.GIT_BRANCH}`\n" +
+                        "Duration: ${currentBuild.durationString}\n" +
+                        "View: ${env.BUILD_URL}"
+            )
+        }
+
+        unstable {
+            slackSend(
+                color: "warning",
+                message: "⚠️ *UNSTABLE*: Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}` is unstable.\n" +
+                        "Branch: `${env.GIT_BRANCH}`\n" +
+                        "View: ${env.BUILD_URL}"
+            )
+        }
+    }
 }
