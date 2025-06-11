@@ -22,7 +22,7 @@ resource "aws_iam_instance_profile" "bastion_profile" {
 resource "aws_instance" "bastion_server" {
   ami           = data.aws_ami.ubuntu.id
   subnet_id     = var.private_subnet_ids[0]
-  instance_type = "t2.micro"
+  instance_type = "t2.small"
   user_data_replace_on_change = true
   user_data   = base64encode(templatefile("${path.module}/script.sh", {
     cluster_name = var.cluster_name,
