@@ -68,17 +68,24 @@ This directory is responsible for deploying Kubernetes resources (manifests) pri
 
 -   **Backend Configuration (`backend.tf`):**
 
-    ```terraform
-    terraform {
-      backend "s3" {
-        bucket  = "iti-graduation-816069170265"
-        key = "terraform/state/infra-manifests"
-        region = "us-east-1"
-      }
-    }
-    ```
+        ```terraform
+        terraform {
+          backend "s3" {
 
-    This state file is stored in the same S3 bucket but with a different key: `terraform/state/infra-manifests`.
+    <<<<<<< HEAD
+    bucket = "iti-graduation-816069170265"
+    =======
+    bucket = "iti-graduation-478614263566"
+
+    > > > > > > > c1519b92c6dbcf88c858944d5fff8f4fc1642cb7
+
+            key = "terraform/state/infra-manifests"
+            region = "us-east-1"
+          }
+        }
+        ```
+
+        This state file is stored in the same S3 bucket but with a different key: `terraform/state/infra-manifests`.
 
 -   **Remote State Data Sources:**
 
