@@ -5,7 +5,7 @@ ArgoCD is the core of the Continuous Delivery strategy, implementing GitOps prin
 
   * **Helm Charts for Application Components:**
       * **`backend` (Helm Chart: `ci-cd-backend`):** Manages the deployment of the Node.js backend application.
-          * Uses the Docker image from `730335506473.dkr.ecr.us-east-1.amazonaws.com/backend` with a configurable tag.
+          * Uses the Docker image from `478614263566.dkr.ecr.us-east-1.amazonaws.com/backend` with a configurable tag.
           * Exposes a `ClusterIP` service named `backend-service` on port `3000`.
           * References Kubernetes secrets named `mysql-k8s-secret` and `redis-k8s-secret` for database and Redis credentials.
           * Configured with CPU and memory limits/requests for resource management.
