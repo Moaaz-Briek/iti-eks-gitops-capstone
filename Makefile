@@ -15,6 +15,10 @@ infra:
 	@terraform -chdir=terraform/infra init
 	@terraform -chdir=terraform/infra apply -var-file="vars.tfvars" --auto-approve
 
+infra_plan:
+	@terraform -chdir=terraform/infra init
+	@terraform -chdir=terraform/infra plan -var-file="vars.tfvars"
+
 dinfra:
 	@terraform -chdir=terraform/infra init
 	@terraform -chdir=terraform/infra destroy -var-file="vars.tfvars"  --auto-approve
@@ -23,6 +27,10 @@ platform:
 	@terraform -chdir=terraform/platform init
 	@terraform -chdir=terraform/platform apply -var-file="vars.tfvars" --auto-approve
 
+platform_plan:
+	@terraform -chdir=terraform/platform init
+	@terraform -chdir=terraform/platform plan -var-file="vars.tfvars"
+
 dplatform:
 	@terraform -chdir=terraform/platform init
 	@terraform -chdir=terraform/platform destroy -var-file="vars.tfvars"  --auto-approve
@@ -30,6 +38,10 @@ dplatform:
 manifests:
 	@terraform -chdir=terraform/manifests init
 	@terraform -chdir=terraform/manifests apply -var-file="vars.tfvars" --auto-approve
+
+manifests_plan:
+	@terraform -chdir=terraform/platform init
+	@terraform -chdir=terraform/platform plan -var-file="vars.tfvars"
 
 dmanifests:
 	@terraform -chdir=terraform/manifests init

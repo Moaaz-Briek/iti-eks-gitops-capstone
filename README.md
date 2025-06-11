@@ -91,7 +91,7 @@ The application is exposed securely to the internet.
   * **Ingress Resources:**
       * Utilizes Ingress resources to securely expose the Node.js application. The `cd/ingress` Helm chart defines the main Ingress resource (`app-ingress`) that routes traffic to the backend and frontend services.
   * **HTTPS:**
-      * Integrates `cert-manager` and `Let's Encrypt` to automate the provisioning and renewal of HTTPS certificates. The `app.itilabs.net` host defined in the Ingress uses `letsencrypt` as the `clusterIssuer`.
+      * Integrates `cert-manager` and `Let's Encrypt` to automate the provisioning and renewal of HTTPS certificates. The `app.danielfarag.cloud` host defined in the Ingress uses `letsencrypt` as the `clusterIssuer`.
 
 
 -----

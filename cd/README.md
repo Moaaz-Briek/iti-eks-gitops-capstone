@@ -5,12 +5,12 @@ ArgoCD is the core of the Continuous Delivery strategy, implementing GitOps prin
 
   * **Helm Charts for Application Components:**
       * **`backend` (Helm Chart: `ci-cd-backend`):** Manages the deployment of the Node.js backend application.
-          * Uses the Docker image from `478614263566.dkr.ecr.us-east-1.amazonaws.com/backend` with a configurable tag.
+          * Uses the Docker image from `730335506473.dkr.ecr.us-east-1.amazonaws.com/backend` with a configurable tag.
           * Exposes a `ClusterIP` service named `backend-service` on port `3000`.
           * References Kubernetes secrets named `mysql-k8s-secret` and `redis-k8s-secret` for database and Redis credentials.
           * Configured with CPU and memory limits/requests for resource management.
       * **`frontend` (Helm Chart: `ci-cd-frontend`):** Manages the deployment of the Angular frontend application.
-          * Uses the Docker image from `478614263566.dkr.ecr.us-east-1.amazonaws.com/frontend` with a configurable tag.
+          * Uses the Docker image from `730335506473.dkr.ecr.us-east-1.amazonaws.com/frontend` with a configurable tag.
           * Exposes a `ClusterIP` service named `frontend-service` on port `80`.
           * Configured with CPU and memory limits/requests.
           * References a `ConfigMap` named `nginx-config` for frontend configuration.
@@ -27,7 +27,7 @@ ArgoCD is the core of the Continuous Delivery strategy, implementing GitOps prin
       * **`ingress` (Helm Chart: `ci-cd-frontend` - note: likely a typo in name, should be `ci-cd-ingress`):** Manages the Kubernetes Ingress resource.
           * Defines an Ingress named `app-ingress` in the `default` namespace.
           * Uses the `nginx` Ingress class and `letsencrypt` as the ClusterIssuer for TLS.
-          * Exposes the application at `app.itilabs.net` with `app-tls` as the TLS secret.
+          * Exposes the application at `app.danielfarag.cloud` with `app-tls` as the TLS secret.
           * Routes traffic:
               * `/` to `frontend-service` on port `80`.
               * `/posts` to `backend-service` on port `3000`.

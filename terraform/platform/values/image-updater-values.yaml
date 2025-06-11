@@ -1,7 +1,7 @@
 config:
   registries:
     - name: ECR Artifacts Registry
-      api_url: https://478614263566.dkr.ecr.us-east-1.amazonaws.com
-      prefix: 478614263566.dkr.ecr.us-east-1.amazonaws.com
+      api_url: https://730335506473.dkr.ecr.us-east-1.amazonaws.com
+      prefix: 730335506473.dkr.ecr.us-east-1.amazonaws.com
       ping: no
       credentials: secret:argocd/aws-token#creds
