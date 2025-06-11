@@ -31,7 +31,7 @@ resource "helm_release" "nginx_ingress" {
 }
 
 data "external" "nginx_lb_dns" {
-  program    = ["bash", "${path.module}/Scripts/get_lb_dns.sh"]
+  program    = ["bash", "${path.module}/scripts/get_lb_dns.sh"]
   depends_on = [helm_release.nginx_ingress]
 }
 

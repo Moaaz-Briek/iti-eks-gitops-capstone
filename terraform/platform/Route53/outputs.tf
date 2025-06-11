@@ -4,6 +4,6 @@ output "ingress_hosts" {
     argocd     = var.argocd_host
     prometheus = var.prometheus_host
     grafana    = var.grafana_host
-    AppHost    = var.app_host
+    app    = var.app_host
   }
 }

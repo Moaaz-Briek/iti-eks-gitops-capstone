@@ -43,7 +43,7 @@ resource "aws_route53_record" "alertmanager" {
   records = [var.nginx_lb_dns]
 }
 
-resource "aws_route53_record" "AppHost" {
+resource "aws_route53_record" "app" {
   zone_id = data.aws_route53_zone.main.zone_id
   name    = var.app_host
   type    = "CNAME"

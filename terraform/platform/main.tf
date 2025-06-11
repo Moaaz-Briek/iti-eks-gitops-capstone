@@ -32,7 +32,6 @@ resource "helm_release" "argocd" {
 
   values = [
     templatefile("${path.module}/values/argocd-values.yaml", {
-      # argocd_host = var.ingress_hosts["argocd"]
       argocd_host = "argocd.${var.domain_name}"
     })
   ]
@@ -66,7 +65,6 @@ resource "helm_release" "jenkins" {
 
   values = [
     templatefile("${path.module}/values/jenkins-values.yaml", {
-      # jenkins_host = var.ingress_hosts["jenkins"]
       jenkins_host = "jenkins.${var.domain_name}"
     })
   ]
@@ -96,48 +94,11 @@ resource "helm_release" "kube_prometheus_stack" {
   create_namespace = true
   values = [
     templatefile("${path.module}/values/monitoring-values.yaml", {
-      # prometheus_host   = var.ingress_hosts["prometheus"]
-      # grafana_host      = var.ingress_hosts["grafana"]
-      # alertmanager_host = var.ingress_host["alertmanager"]
       prometheus_host   = "prometheus.${var.domain_name}"
       grafana_host      = "grafana.${var.domain_name}"
       alertmanager_host = "alertmanager.${var.domain_name}"
     })
   ]
-}
-
-resource "helm_release" "certbot" {
-  name       = "certbot"
-  repository = "https://charts.jetstack.io"
-  chart      = "cert-manager"
-  version    = "v1.8.0"
-
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
-
-  values = [
-    file("values/certbot-values.yaml")
-  ]
-}
-
-
-module "nginx-ingress" {
-  source       = "./ingress-controller"
-  eks_core_dns = var.domain_name
-}
-
-module "route53" {
-  source            = "./route53"
-  nginx_lb_dns      = module.nginx-ingress.nginx_lb_dns
-  domain_name       = var.domain_name
-  jenkins_host      = "jenkins.${var.domain_name}"
-  argocd_host       = "argocd.${var.domain_name}"
-  prometheus_host   = "prometheus.${var.domain_name}"
-  grafana_host      = "grafana.${var.domain_name}"
-  alertmanager_host = "alertmanager.${var.domain_name}"
-  app_host          = "app.${var.domain_name}"
 }
 
 
@@ -167,8 +128,6 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
       }
     }
   }
-
-  depends_on = [ helm_release.certbot ]
 }
 
 resource "kubernetes_manifest" "app_certificate" {
@@ -189,7 +148,7 @@ resource "kubernetes_manifest" "app_certificate" {
     }
   }
 
-  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
 }
 
 resource "kubernetes_manifest" "argocd_certificate" {
@@ -210,7 +169,7 @@ resource "kubernetes_manifest" "argocd_certificate" {
     }
   }
 
-  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
 }
 
 resource "kubernetes_manifest" "jenkins_certificate" {
@@ -231,7 +190,7 @@ resource "kubernetes_manifest" "jenkins_certificate" {
     }
   }
 
-  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
 }
 
 resource "kubernetes_manifest" "prometheus_certificate" {
@@ -252,7 +211,7 @@ resource "kubernetes_manifest" "prometheus_certificate" {
     }
   }
 
-  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
 }
 
 resource "kubernetes_manifest" "grafana_certificate" {
@@ -273,7 +232,7 @@ resource "kubernetes_manifest" "grafana_certificate" {
     }
   }
 
-  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
 }
 
 resource "kubernetes_manifest" "alertmanager_certificate" {
@@ -294,5 +253,24 @@ resource "kubernetes_manifest" "alertmanager_certificate" {
     }
   }
 
-  depends_on = [ helm_release.certbot, kubernetes_manifest.letsencrypt_issuer ]
+  depends_on = [ kubernetes_manifest.letsencrypt_issuer ]
 }
+
+
+module "nginx-ingress" {
+  source       = "./ingress-controller"
+  eks_core_dns = var.domain_name
+}
+
+module "route53" {
+  source            = "./route53"
+  nginx_lb_dns      = module.nginx-ingress.nginx_lb_dns
+  domain_name       = var.domain_name
+  jenkins_host      = "jenkins.${var.domain_name}"
+  argocd_host       = "argocd.${var.domain_name}"
+  prometheus_host   = "prometheus.${var.domain_name}"
+  grafana_host      = "grafana.${var.domain_name}"
+  alertmanager_host = "alertmanager.${var.domain_name}"
+  app_host          = "app.${var.domain_name}"
+}
+
