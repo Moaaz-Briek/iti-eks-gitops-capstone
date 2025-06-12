@@ -1,21 +1,21 @@
 ingress:
-  name: app-ingress
-  namespace: default
-  class: nginx
-  clusterIssuer: letsencrypt
-  host: app.iti-project.com
-  tlsSecret: app-tls
+    name: app-ingress
+    namespace: default
+    class: nginx
+    clusterIssuer: letsencrypt
+    host: app.iti-devops.space
+    tlsSecret: app-tls
 
-  paths:
-    - path: /
-      service: frontend-service
-      port: 80
-    - path: /posts
-      service: backend-service
-      port: 3000
-    - path: /mysql
-      service: mysql
-      port: 3306
-    - path: /redis
-      service: redis
-      port: 6379
+    paths:
+        - path: /
+          service: frontend-service
+          port: 80
+        - path: /posts
+          service: backend-service
+          port: 3000
+        - path: /mysql
+          service: mysql
+          port: 3306
+        - path: /redis
+          service: redis
+          port: 6379
